@@ -1,0 +1,45 @@
+[gd_scene load_steps=7 format=3 uid="uid://bbmsscnsvd1h6"]
+
+[ext_resource type="Texture2D" uid="uid://c5an74gg46320" path="res://Map/WaterBackground.jpg" id="1_ohof8"]
+[ext_resource type="PackedScene" uid="uid://70mn7helffdi" path="res://Fish/fish.tscn" id="1_terai"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_ohof8"]
+normal = Vector2(1, 0)
+distance = -1000.0
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_08stc"]
+normal = Vector2(0, 1)
+distance = -1000.0
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_e13gr"]
+distance = -1000.0
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_lhttk"]
+normal = Vector2(-1, 0)
+distance = -1000.0
+
+[node name="TestMap" type="Node2D"]
+
+[node name="TextureRect" type="TextureRect" parent="."]
+offset_left = -1232.0
+offset_top = -1040.0
+offset_right = 1284.0
+offset_bottom = 1120.0
+texture = ExtResource("1_ohof8")
+stretch_mode = 1
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="LeftWall" type="CollisionShape2D" parent="StaticBody2D"]
+shape = SubResource("WorldBoundaryShape2D_ohof8")
+
+[node name="UpperWall" type="CollisionShape2D" parent="StaticBody2D"]
+shape = SubResource("WorldBoundaryShape2D_08stc")
+
+[node name="LowerWall" type="CollisionShape2D" parent="StaticBody2D"]
+shape = SubResource("WorldBoundaryShape2D_e13gr")
+
+[node name="RightWall" type="CollisionShape2D" parent="StaticBody2D"]
+shape = SubResource("WorldBoundaryShape2D_lhttk")
+
+[node name="Fish" parent="." instance=ExtResource("1_terai")]
