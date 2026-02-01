@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c5an74gg46320"
-path="res://.godot/imported/WaterBackground.jpg-521d52a31e61cb73c51a6f81846d56be.ctex"
+path="res://.godot/imported/WaterBackground.jpg-0f8b616c4753c261ea8239e0f1d83d69.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Map/WaterBackground.jpg"
-dest_files=["res://.godot/imported/WaterBackground.jpg-521d52a31e61cb73c51a6f81846d56be.ctex"]
+source_file="res://Map/TestMap/WaterBackground.jpg"
+dest_files=["res://.godot/imported/WaterBackground.jpg-0f8b616c4753c261ea8239e0f1d83d69.ctex"]
 
 [params]
 

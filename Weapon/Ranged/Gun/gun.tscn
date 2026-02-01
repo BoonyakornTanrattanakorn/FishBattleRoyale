@@ -1,0 +1,13 @@
+[gd_scene load_steps=4 format=3 uid="uid://cotxawinsk3s"]
+
+[ext_resource type="Script" uid="uid://b4gjkd2bohqi1" path="res://Weapon/Ranged/Gun/gun.gd" id="1_ukpca"]
+[ext_resource type="PackedScene" uid="uid://o8oexdkjl4mv" path="res://Weapon/Ranged/Bullet/bullet.tscn" id="2_vafyf"]
+[ext_resource type="Texture2D" uid="uid://cqcjgynabl1a6" path="res://Weapon/Ranged/Gun/gun.png" id="2_yj1bh"]
+
+[node name="Gun" type="Node2D"]
+script = ExtResource("1_ukpca")
+bullet_scene = ExtResource("2_vafyf")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.2840909, 0.2840909)
+texture = ExtResource("2_yj1bh")

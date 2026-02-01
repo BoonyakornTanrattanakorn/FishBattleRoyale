@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://70mn7helffdi"]
+[gd_scene load_steps=5 format=3 uid="uid://70mn7helffdi"]
 
-[ext_resource type="Script" uid="uid://cd2f2bdpdetdr" path="res://Fish/fish.gd" id="1_gwbox"]
-[ext_resource type="Texture2D" uid="uid://1g02spsbvwyp" path="res://Fish/fish.png" id="1_oldk7"]
+[ext_resource type="Script" uid="uid://cd2f2bdpdetdr" path="res://Player/Fish/fish.gd" id="1_gwbox"]
+[ext_resource type="Texture2D" uid="uid://1g02spsbvwyp" path="res://Player/Fish/fish.png" id="1_oldk7"]
+[ext_resource type="PackedScene" uid="uid://cotxawinsk3s" path="res://Weapon/Ranged/Gun/gun.tscn" id="3_8q4ms"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gwbox"]
 radius = 43.0
@@ -22,3 +23,7 @@ texture = ExtResource("1_oldk7")
 position = Vector2(-5, 2)
 rotation = 1.5707964
 shape = SubResource("CapsuleShape2D_gwbox")
+
+[node name="Gun" parent="CharacterBody2D" instance=ExtResource("3_8q4ms")]
+position = Vector2(70, 27)
+muzzle_distance = 0.0
