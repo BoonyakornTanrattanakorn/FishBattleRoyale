@@ -7,7 +7,7 @@ var player: Player
 @onready var bomb_placement_system: BombPlacementSystem = $"../BombPlacementSystem"
 @onready var speed_up_timer: Timer = $SpeedUpTimer
 
-const SPEED_MOD = 100
+const SPEED_MOD = 50
 
 func _ready() -> void:
 	player = get_parent()

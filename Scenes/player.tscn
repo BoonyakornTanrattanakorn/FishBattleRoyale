@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://gg74v81xi7sp" path="res://Scripts/player.gd" id="1_cvnsp"]
 [ext_resource type="Texture2D" uid="uid://lfobox48lvbe" path="res://Assets/SeaCharacter.png" id="1_v0iea"]
 [ext_resource type="Script" uid="uid://dpow6645xsqp6" path="res://Scripts/ray_casts.gd" id="3_6t5aa"]
-[ext_resource type="Script" uid="uid://ci3rbsupfrilr" path="res://Scripts/bomb_placement_system.gd" id="4_vgqql"]
+[ext_resource type="Script" path="res://Scripts/bomb_placement_system.gd" id="4_vgqql"]
 [ext_resource type="Script" uid="uid://bbmakuws150p6" path="res://Scripts/power_up_system.gd" id="5_fkybt"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_cvnsp"]
@@ -25,7 +25,7 @@ animations = [{
 custom_solver_bias = 0.097
 size = Vector2(38.5, 27)
 
-[node name="Player" type="Area2D" unique_id=1910785464]
+[node name="Player" type="Area2D" unique_id=1910785464 groups=["player"]]
 collision_mask = 64
 script = ExtResource("1_cvnsp")
 
