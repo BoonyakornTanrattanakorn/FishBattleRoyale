@@ -1,0 +1,70 @@
+[gd_scene format=3 uid="uid://d2p4tkwah0oo4"]
+
+[ext_resource type="Script" uid="uid://d4yhaae7euqd" path="res://Scripts/bomb.gd" id="1_kdyat"]
+[ext_resource type="Texture2D" uid="uid://ccpwe2cxwpcj6" path="res://Assets/BubbleBomb.png" id="2_2fiif"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ga526"]
+atlas = ExtResource("2_2fiif")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bl3wg"]
+atlas = ExtResource("2_2fiif")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0fywk"]
+atlas = ExtResource("2_2fiif")
+region = Rect2(0, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hp6pl"]
+atlas = ExtResource("2_2fiif")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gvsgw"]
+atlas = ExtResource("2_2fiif")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_bjcm7"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ga526")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bl3wg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0fywk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hp6pl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gvsgw")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jq5aq"]
+size = Vector2(32, 32)
+
+[node name="Bomb" type="Area2D" unique_id=2033420062]
+collision_layer = 8
+script = ExtResource("1_kdyat")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=39956885]
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_bjcm7")
+autoplay = "default"
+frame_progress = 0.0026652638
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1629000856]
+shape = SubResource("RectangleShape2D_jq5aq")
+
+[node name="Timer" type="Timer" parent="." unique_id=589875355]
+wait_time = 3.0
+one_shot = true
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

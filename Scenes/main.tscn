@@ -3,7 +3,6 @@
 [ext_resource type="Texture2D" uid="uid://dr34ytbcawg4e" path="res://Assets/tf_atlantis_tiles.png" id="1_jjgbg"]
 [ext_resource type="PackedScene" uid="uid://dscfrnsvp82w" path="res://Scenes/player.tscn" id="2_bo1nx"]
 [ext_resource type="PackedScene" uid="uid://dwxmmqtoe12ao" path="res://Scenes/wall_tile.tscn" id="3_8gbba"]
-[ext_resource type="PackedScene" uid="uid://nxwaj8gjj8se" path="res://Scenes/power_up.tscn" id="3_jjvhh"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_bo1nx"]
 texture = ExtResource("1_jjgbg")
@@ -1523,7 +1522,7 @@ texture = ExtResource("1_jjgbg")
 28:33/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 
 [sub_resource type="TileSet" id="TileSet_8gbba"]
-physics_layer_0/collision_layer = 1
+physics_layer_0/collision_layer = 2
 sources/0 = SubResource("TileSetAtlasSource_bo1nx")
 
 [node name="main" type="Node2D" unique_id=429806604]
@@ -1533,10 +1532,8 @@ tile_map_data = PackedByteArray("AAAAAAAAAAAFABcAAAABAAAAAAAFABcAAAACAAAAAAAFABc
 tile_set = SubResource("TileSet_8gbba")
 
 [node name="Player" parent="." unique_id=1284569576 groups=["player"] instance=ExtResource("2_bo1nx")]
+z_index = 1
 position = Vector2(136, 112)
-
-[node name="PowerUp" parent="." unique_id=1429976183 instance=ExtResource("3_jjvhh")]
-position = Vector2(248, 166)
 
 [node name="WallTiles" type="Node" parent="." unique_id=1220724889]
 
@@ -1580,7 +1577,7 @@ position = Vector2(104, 160)
 position = Vector2(88, 240)
 
 [node name="WallTile14" parent="WallTiles" unique_id=68897114 instance=ExtResource("3_8gbba")]
-position = Vector2(216, 208)
+position = Vector2(584, 315)
 
 [node name="WallTile15" parent="WallTiles" unique_id=221814299 instance=ExtResource("3_8gbba")]
 position = Vector2(208, 392)

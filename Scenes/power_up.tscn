@@ -1,26 +1,15 @@
 [gd_scene format=3 uid="uid://nxwaj8gjj8se"]
 
 [ext_resource type="Script" uid="uid://b5qp48668d7e8" path="res://Scripts/power_up.gd" id="1_p3i06"]
-[ext_resource type="Texture2D" uid="uid://dno7mxbfyx0di" path="res://Assets/bomb_enhance.png" id="1_psa43"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_p3i06"]
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_6otjv"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("1_psa43")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}]
+size = Vector2(24, 24)
 
 [node name="PowerUp" type="Area2D" unique_id=1429976183]
+collision_layer = 64
 script = ExtResource("1_p3i06")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=880830702]
 shape = SubResource("RectangleShape2D_p3i06")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1905730729]
-sprite_frames = SubResource("SpriteFrames_6otjv")
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=22537288]
