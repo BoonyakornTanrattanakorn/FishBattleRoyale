@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://dwxmmqtoe12ao"]
+
+[ext_resource type="Texture2D" uid="uid://dr34ytbcawg4e" path="res://Assets/tf_atlantis_tiles.png" id="1_07dip"]
+[ext_resource type="Script" uid="uid://cpg88juktfmja" path="res://Scripts/wall_tile.gd" id="1_66drq"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_66drq"]
+atlas = ExtResource("1_07dip")
+region = Rect2(272, 160, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_4714m"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_66drq")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vvkjj"]
+size = Vector2(32, 32)
+
+[node name="WallTile" type="StaticBody2D" unique_id=64812677]
+script = ExtResource("1_66drq")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1981768583]
+sprite_frames = SubResource("SpriteFrames_4714m")
+autoplay = "default"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1589653048]
+shape = SubResource("RectangleShape2D_vvkjj")
