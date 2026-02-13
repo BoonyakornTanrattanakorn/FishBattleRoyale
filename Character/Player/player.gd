@@ -4,6 +4,8 @@ extends Area2D
 
 class_name Player
 
+signal healthChanged
+
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 @onready var bomb_placement_system: BombPlacementSystem = $BombPlacementSystem
 @onready var ray = $RayCast2D
@@ -52,6 +54,7 @@ func move(dir):
 		
 func reduceHp():
 	setHp(getHp()-1)
+	healthChanged.emit(hp)
 	if getHp() <= 0:
 		die()
 

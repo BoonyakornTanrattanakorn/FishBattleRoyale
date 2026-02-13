@@ -6,7 +6,7 @@ extends Node2D
 func _ready() -> void:
 	heartsContainer.setMaxHearts(3)
 	heartsContainer.updateHearts(player.getHp())
-
+	player.healthChanged.connect(heartsContainer.updateHearts)
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
