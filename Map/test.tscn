@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://dr34ytbcawg4e" path="res://Assets/tf_atlantis_tiles.png" id="1_3d36u"]
 [ext_resource type="PackedScene" uid="uid://dscfrnsvp82w" path="res://Character/Player/player.tscn" id="2_lhw50"]
 [ext_resource type="PackedScene" uid="uid://dwxmmqtoe12ao" path="res://Block/Indestructible/Wall/wall.tscn" id="3_0q0wn"]
+[ext_resource type="PackedScene" uid="uid://cvon06jsd7m25" path="res://Character/Player/heart_container.tscn" id="4_lhw50"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_bo1nx"]
 texture = ExtResource("1_3d36u")
@@ -1656,3 +1657,12 @@ position = Vector2(728, 328)
 
 [node name="WallTile40" parent="WallTiles" unique_id=88496609 instance=ExtResource("3_0q0wn")]
 position = Vector2(592, 464)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=714262360]
+scale = Vector2(3, 3)
+transform = Transform2D(3, 0, 0, 3, 0, 0)
+
+[node name="heartContainer" parent="CanvasLayer" unique_id=363770908 instance=ExtResource("4_lhw50")]
+offset_left = 331.33334
+offset_right = 383.33334
+offset_bottom = 15.0
