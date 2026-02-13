@@ -15,13 +15,14 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 [application]
 
 config/name="Fish_Bomberman"
-run/main_scene="uid://f5ylv2dqhuho"
+run/main_scene="uid://oic46gher08e"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
 [autoload]
 
 Utils="*uid://csnmcpm0vyjg1"
+Config="*uid://dw0yqdoabj7md"
 
 [display]
 
