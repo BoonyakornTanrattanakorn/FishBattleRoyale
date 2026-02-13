@@ -45,7 +45,7 @@ func move(dir):
 	if !ray.is_colliding():
 		var tween = create_tween()
 		tween.tween_property(self, "position",
-			position + dir *    Config.tile_size, 1.0/animation_speed).set_trans(Tween.TRANS_SINE)
+			position + dir * Config.tile_size, 1.0/animation_speed).set_trans(Tween.TRANS_SINE)
 		moving = true
 		await tween.finished
 		moving = false
