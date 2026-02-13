@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="PowerUpRes" format=3 uid="uid://cel88eiyykk3f"]
 
-[ext_resource type="Script" uid="uid://tvx36yg1ykkd" path="res://Scripts/power_up_res.gd" id="1_luqv1"]
+[ext_resource type="Script" uid="uid://tvx36yg1ykkd" path="res://PowerUp/power_up_res.gd" id="1_luqv1"]
 [ext_resource type="Texture2D" uid="uid://cmkjqujyrj0bh" path="res://Assets/bomb_up.png" id="2_luqv1"]
 
 [resource]

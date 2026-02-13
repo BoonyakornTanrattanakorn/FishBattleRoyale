@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="PowerUpRes" format=3 uid="uid://bswqao73qf2ek"]
 
-[ext_resource type="Script" uid="uid://tvx36yg1ykkd" path="res://Scripts/power_up_res.gd" id="1_1n63h"]
+[ext_resource type="Script" uid="uid://tvx36yg1ykkd" path="res://PowerUp/power_up_res.gd" id="1_1n63h"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_skw81"]
 load_path = "res://.godot/imported/speed_up.png-e876881fb69bcd5c494fe2ba87b1f4b3.ctex"

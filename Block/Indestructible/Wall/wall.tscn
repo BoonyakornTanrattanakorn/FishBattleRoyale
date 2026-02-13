@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dwxmmqtoe12ao"]
 
 [ext_resource type="Texture2D" uid="uid://dr34ytbcawg4e" path="res://Assets/tf_atlantis_tiles.png" id="1_07dip"]
-[ext_resource type="Script" uid="uid://cpg88juktfmja" path="res://Scripts/wall_tile.gd" id="1_66drq"]
+[ext_resource type="Script" uid="uid://cpg88juktfmja" path="res://Block/Indestructible/Wall/wall.gd" id="1_66drq"]
 [ext_resource type="Resource" uid="uid://cel88eiyykk3f" path="res://Resources/bomb_up.tres" id="2_53adx"]
 [ext_resource type="Resource" uid="uid://bymrmostgoifm" path="res://Resources/fire_up.tres" id="3_4bc5v"]
 [ext_resource type="Resource" uid="uid://bswqao73qf2ek" path="res://Resources/speed_up.tres" id="4_3mwbc"]

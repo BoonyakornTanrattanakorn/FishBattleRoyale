@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://d2p4tkwah0oo4"]
 
-[ext_resource type="Script" uid="uid://d4yhaae7euqd" path="res://Scripts/bomb.gd" id="1_kdyat"]
+[ext_resource type="Script" uid="uid://d4yhaae7euqd" path="res://Bomb/bomb.gd" id="1_kdyat"]
 [ext_resource type="Texture2D" uid="uid://ccpwe2cxwpcj6" path="res://Assets/BubbleBomb.png" id="2_2fiif"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ga526"]

@@ -2,7 +2,7 @@ extends Area2D
 
 class_name Bomb
 
-const CENTRAL_EXPLOSION = preload("res://Scenes/center_explosion.tscn")
+const CENTRAL_EXPLOSION = preload("res://Bomb/center_explosion.tscn")
 
 var explosion_size = 1
 

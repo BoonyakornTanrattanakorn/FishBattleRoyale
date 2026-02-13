@@ -2,7 +2,7 @@ extends StaticBody2D
 
 class_name BrickWall
 
-const POWER_UP_SCENE = preload("res://Scenes/power_up.tscn")
+const POWER_UP_SCENE = preload("res://PowerUp/power_up.tscn")
 
 @export var bomb_up_res: PowerUpRes
 @export var fire_up_res: PowerUpRes

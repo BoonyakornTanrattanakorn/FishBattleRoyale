@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bswq5268eq6nd"]
 
-[ext_resource type="Script" path="res://Scripts/center_explosion.gd" id="1_2wsdm"]
+[ext_resource type="Script" uid="uid://cc57fxl748q7m" path="res://Bomb/center_explosion.gd" id="1_2wsdm"]
 [ext_resource type="Texture2D" uid="uid://ce8tiyhx7svsv" path="res://Assets/Sprites.png" id="2_67u3d"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1o01m"]

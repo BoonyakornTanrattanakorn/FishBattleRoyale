@@ -17,7 +17,7 @@ var animation_dirs: Array[Vector2] = [
 	Vector2(TILE_SIZE, 0)
 ]
 
-const DIRECTIONAL_EXPLOSION = preload("res://Scenes/directional_explosion.tscn")
+const DIRECTIONAL_EXPLOSION = preload("res://Bomb/directional_explosion.tscn")
 
 # Explosion size for all directions
 var size = 1

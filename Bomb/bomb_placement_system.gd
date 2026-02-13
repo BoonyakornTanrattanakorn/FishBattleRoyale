@@ -2,7 +2,7 @@ extends Node
 
 class_name BombPlacementSystem
 
-const BOMB_SCENE = preload("res://Scenes/bomb.tscn")
+const BOMB_SCENE = preload("res://Bomb/bomb.tscn")
 
 const TILE_SIZE = 32 # can be changed later
 
