@@ -25,15 +25,15 @@ func _input(_event: InputEvent) -> void:
 	if moving:
 		return
 		
-	if Input.is_action_just_pressed("Right"):
+	if Input.is_action_pressed("Right"):
 		move(Vector2.RIGHT)
 		animated_sprite_2d.flip_h = false
-	elif Input.is_action_just_pressed("Left"):
+	elif Input.is_action_pressed("Left"):
 		move(Vector2.LEFT)
 		animated_sprite_2d.flip_h = true
-	elif Input.is_action_just_pressed("Up"):
+	elif Input.is_action_pressed("Up"):
 		move(Vector2.UP)
-	elif Input.is_action_just_pressed("Down"):
+	elif Input.is_action_pressed("Down"):
 		move(Vector2.DOWN)
 	
 	if Input.is_action_just_pressed("PlaceBomb"):
