@@ -40,7 +40,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qflv0"]
-size = Vector2(32, 32)
+size = Vector2(64, 64)
 
 [node name="CenterExplosion" type="Area2D" unique_id=2032283712]
 collision_layer = 16
@@ -48,12 +48,13 @@ collision_mask = 37
 script = ExtResource("1_2wsdm")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1427637485]
-scale = Vector2(2, 2)
+scale = Vector2(4, 4)
 sprite_frames = SubResource("SpriteFrames_0ghed")
 autoplay = "default"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1089638019]
 shape = SubResource("RectangleShape2D_qflv0")
+disabled = true
 
 [node name="Raycasts" type="Node2D" parent="." unique_id=1801374017]
 

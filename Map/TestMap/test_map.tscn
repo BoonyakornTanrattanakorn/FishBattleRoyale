@@ -3,7 +3,6 @@
 [ext_resource type="PackedScene" uid="uid://dscfrnsvp82w" path="res://Character/Player/player.tscn" id="1_5wecu"]
 [ext_resource type="Script" uid="uid://cvxu7gj1okq4f" path="res://Map/TestMap/test_map.gd" id="1_ousxa"]
 [ext_resource type="Texture2D" uid="uid://dr34ytbcawg4e" path="res://Assets/tf_atlantis_tiles.png" id="2_atj0c"]
-[ext_resource type="PackedScene" uid="uid://dwxmmqtoe12ao" path="res://Block/Destructible/Coral/coral.tscn" id="3_vhi6j"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vq4t1"]
 atlas = ExtResource("2_atj0c")
@@ -22,6 +21,3 @@ stretch_mode = 1
 
 [node name="Player" parent="." unique_id=1910785464 instance=ExtResource("1_5wecu")]
 position = Vector2(102, 161)
-
-[node name="WallTile" parent="." unique_id=64812677 instance=ExtResource("3_vhi6j")]
-position = Vector2(163, 277)

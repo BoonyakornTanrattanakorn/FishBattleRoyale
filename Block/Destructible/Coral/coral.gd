@@ -1,4 +1,4 @@
-extends Block
+extends DestructibleBlock
 
 class_name Coral
 
