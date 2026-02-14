@@ -17,6 +17,10 @@ var max_bombs = 1
 
 const MAX_HP = 3
 
+var invincible := false
+var invincible_time := 1.0 # seconds
+
+
 func _ready() -> void:
 	position = position.snapped(Vector2.ONE * Config.tile_size)
 	position += Vector2.ONE * Config.tile_size/2
@@ -51,9 +55,30 @@ func move(dir):
 		moving = false
 
 func reduceHp():
-	setHp(getHp()-1)
+	if invincible:
+		return
+
+	setHp(getHp() - 1)
+
 	if getHp() <= 0:
 		die()
+	else:
+		start_invincible()
+
+func start_invincible():
+	invincible = true
+
+	# Optional blinking effect
+	var tween := create_tween()
+	tween.set_loops(int(invincible_time / 0.1))
+
+	tween.tween_property(animated_sprite_2d, "modulate:a", 0.3, 0.05)
+	tween.tween_property(animated_sprite_2d, "modulate:a", 1.0, 0.05)
+
+	await get_tree().create_timer(invincible_time).timeout
+
+	invincible = false
+	animated_sprite_2d.modulate.a = 1.0
 
 func die():
 	print("die")

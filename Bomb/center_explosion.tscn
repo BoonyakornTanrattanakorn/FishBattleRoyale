@@ -54,7 +54,6 @@ autoplay = "default"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1089638019]
 shape = SubResource("RectangleShape2D_qflv0")
-disabled = true
 
 [node name="Raycasts" type="Node2D" parent="." unique_id=1801374017]
 
