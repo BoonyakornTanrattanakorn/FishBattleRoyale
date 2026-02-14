@@ -22,7 +22,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vvkjj"]
-size = Vector2(32, 32)
+size = Vector2(64, 64)
 
 [node name="WallTile" type="StaticBody2D" unique_id=64812677]
 collision_layer = 4
@@ -32,6 +32,7 @@ fire_up_res = ExtResource("3_4bc5v")
 speed_up_res = ExtResource("4_3mwbc")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1981768583]
+scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_4714m")
 autoplay = "default"
 

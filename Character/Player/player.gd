@@ -24,7 +24,7 @@ func _ready() -> void:
 func _input(_event: InputEvent) -> void:
 	if moving:
 		return
-		
+
 	if Input.is_action_pressed("Right"):
 		move(Vector2.RIGHT)
 		animated_sprite_2d.flip_h = false
@@ -35,7 +35,7 @@ func _input(_event: InputEvent) -> void:
 		move(Vector2.UP)
 	elif Input.is_action_pressed("Down"):
 		move(Vector2.DOWN)
-	
+
 	if Input.is_action_just_pressed("PlaceBomb"):
 		bomb_placement_system.place_bomb()
 
@@ -49,7 +49,7 @@ func move(dir):
 		moving = true
 		await tween.finished
 		moving = false
-		
+
 func reduceHp():
 	setHp(getHp()-1)
 	if getHp() <= 0:
