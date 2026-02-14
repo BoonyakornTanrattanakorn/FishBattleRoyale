@@ -65,8 +65,8 @@ func calculate_size_of_explosion(raycast: RayCast2D):
 		return size_of_explosion_before_collider
 
 func execute_explosion_collision(collider: Object):
-	if collider as BrickWall:
-		(collider as BrickWall).destroy()
+	if collider as Coral:
+		(collider as Coral).destroy()
 
 func _on_animated_sprite_2d_animation_finished() -> void:
 	queue_free()
