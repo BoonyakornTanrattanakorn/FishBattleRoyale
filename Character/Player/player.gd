@@ -7,7 +7,14 @@ signal healthChanged
 @onready var bomb_placement_system: BombPlacementSystem = $BombPlacementSystem
 @onready var power_up_system: Node = $PowerUpSystem
 
+@onready var heart_container: HBoxContainer = $CanvasLayer/heartContainer
 
+func _ready() -> void:
+	super()
+	heart_container.setMaxHearts(3)
+	heart_container.updateHearts(get_hp())
+	healthChanged.connect(heart_container.updateHearts)
+	
 func _input(_event):
 	if moving:
 		return
@@ -37,10 +44,10 @@ func move(dir):
 		await tween.finished
 		moving = false
 		
-func reduceHp():
-	setHp(getHp()-1)
+func reduce_hp():
+	set_hp(get_hp()-1)
 	healthChanged.emit(hp)
-	if getHp() <= 0:
+	if get_hp() <= 0:
 		die()
 
 # Override invincible for blinking
