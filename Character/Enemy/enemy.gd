@@ -1,4 +1,4 @@
-extends Player
+extends Character
 class_name Enemy
 
 const DIRECTIONS = [
@@ -7,6 +7,8 @@ const DIRECTIONS = [
 	Vector2.UP,
 	Vector2.DOWN
 ]
+
+@onready var bomb_placement_system: Node = $BombPlacementSystem
 
 var think_time := 0.5
 
@@ -24,7 +26,7 @@ func ai_loop():
 
 
 func think():
-	var target := get_closest_player()
+	var target: Character = get_closest_player()
 
 	if target:
 		chase(target)
@@ -36,8 +38,8 @@ func think():
 		bomb_placement_system.place_bomb()
 
 
-func chase(target: Player):
-	var delta := target.position - position
+func chase(target: Character):
+	var delta: Vector2 = target.position - position
 
 	var dir: Vector2
 
@@ -49,9 +51,9 @@ func chase(target: Player):
 	move(dir)
 
 
-func get_closest_player() -> Player:
+func get_closest_player() -> Character:
 	var players := get_tree().get_nodes_in_group("players")
-	var closest: Player
+	var closest: Character = null
 	var best := INF
 
 	for p in players:

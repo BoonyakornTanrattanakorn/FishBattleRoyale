@@ -1,11 +1,20 @@
 extends Character
 class_name Player
 
+signal healthChanged
+
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 @onready var bomb_placement_system: BombPlacementSystem = $BombPlacementSystem
 @onready var power_up_system: Node = $PowerUpSystem
 
+@onready var heart_container: HBoxContainer = $CanvasLayer/heartContainer
 
+func _ready() -> void:
+	super()
+	heart_container.setMaxHearts(3)
+	heart_container.updateHearts(get_hp())
+	healthChanged.connect(heart_container.updateHearts)
+	
 func _input(_event):
 	if moving:
 		return
@@ -24,6 +33,22 @@ func _input(_event):
 	if Input.is_action_just_pressed("PlaceBomb"):
 		bomb_placement_system.place_bomb()
 
+func move(dir):
+	ray.target_position = dir * Config.tile_size
+	ray.force_raycast_update()
+	if !ray.is_colliding():
+		var tween = create_tween()
+		tween.tween_property(self, "position",
+			position + dir * Config.tile_size, 1.0/animation_speed).set_trans(Tween.TRANS_SINE)
+		moving = true
+		await tween.finished
+		moving = false
+		
+func reduce_hp():
+	set_hp(get_hp()-1)
+	healthChanged.emit(hp)
+	if get_hp() <= 0:
+		die()
 
 # Override invincible for blinking
 func start_invincible():

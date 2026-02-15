@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://gg74v81xi7sp" path="res://Character/Player/player.gd" id="1_cvnsp"]
 [ext_resource type="Texture2D" uid="uid://lfobox48lvbe" path="res://Assets/SeaCharacter.png" id="1_v0iea"]
 [ext_resource type="Script" uid="uid://ci3rbsupfrilr" path="res://Bomb/bomb_placement_system.gd" id="4_vgqql"]
+[ext_resource type="PackedScene" uid="uid://cvon06jsd7m25" path="res://Character/Player/heart_container.tscn" id="5_1spju"]
 [ext_resource type="Script" uid="uid://bbmakuws150p6" path="res://PowerUp/power_up_system.gd" id="5_fkybt"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_cvnsp"]
@@ -26,6 +27,12 @@ size = Vector2(64, 64)
 [node name="Player" type="Area2D" unique_id=1910785464 groups=["player"]]
 collision_mask = 64
 script = ExtResource("1_cvnsp")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=2030641859]
+scale = Vector2(3, 3)
+transform = Transform2D(3, 0, 0, 3, 0, 0)
+
+[node name="heartContainer" parent="CanvasLayer" unique_id=363770908 instance=ExtResource("5_1spju")]
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=879305106]
 texture_filter = 1
