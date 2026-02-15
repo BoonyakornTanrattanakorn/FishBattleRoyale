@@ -11,17 +11,16 @@ class_name CenterExplosion
 
 var animation_names = ["up", "down", "left", "right"]
 var animation_dirs: Array[Vector2] = [
-	Vector2(0, -TILE_SIZE),
-	Vector2(0, TILE_SIZE),
-	Vector2(-TILE_SIZE, 0),
-	Vector2(TILE_SIZE, 0)
+	Vector2(0, -Config.tile_size),
+	Vector2(0, Config.tile_size),
+	Vector2(-Config.tile_size, 0),
+	Vector2(Config.tile_size, 0)
 ]
 
 const DIRECTIONAL_EXPLOSION = preload("res://Bomb/directional_explosion.tscn")
 
 # Explosion size for all directions
 var size = 1
-const TILE_SIZE = 32
 
 func _ready() -> void:
 	check_reycasts()
@@ -61,12 +60,12 @@ func calculate_size_of_explosion(raycast: RayCast2D):
 		var collision_point = raycast.get_collision_point()
 		
 		var distance_to_collider = raycast.global_position.distance_to(collision_point)
-		var size_of_explosion_before_collider = max(roundi(absf(distance_to_collider)/ TILE_SIZE - 1), 0)
+		var size_of_explosion_before_collider = max(roundi(absf(distance_to_collider)/ Config.tile_size - 1), 0)
 		return size_of_explosion_before_collider
 
 func execute_explosion_collision(collider: Object):
-	if collider as BrickWall:
-		(collider as BrickWall).destroy()
+	if collider as DestructibleBlock:
+		(collider as DestructibleBlock).destroy()
 
 func _on_animated_sprite_2d_animation_finished() -> void:
 	queue_free()

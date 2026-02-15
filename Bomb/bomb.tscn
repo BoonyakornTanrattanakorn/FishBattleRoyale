@@ -46,9 +46,6 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_jq5aq"]
-size = Vector2(32, 32)
-
 [node name="Bomb" type="Area2D" unique_id=2033420062]
 collision_layer = 8
 script = ExtResource("1_kdyat")
@@ -58,9 +55,6 @@ scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_bjcm7")
 autoplay = "default"
 frame_progress = 0.0026652638
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1629000856]
-shape = SubResource("RectangleShape2D_jq5aq")
 
 [node name="Timer" type="Timer" parent="." unique_id=589875355]
 wait_time = 3.0

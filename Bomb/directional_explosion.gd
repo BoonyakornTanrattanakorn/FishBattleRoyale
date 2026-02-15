@@ -9,6 +9,6 @@ func play_animation(animation_name: String):
 
 
 func _on_area_entered(body: Node2D) -> void:
-	if body is Player:
-		(body as Player).reduceHp()
-		print("Bomb hit, HP = ", body.getHp())
+	if body is Character:
+		(body as Character).reduce_hp()
+		print("Bomb hit, HP = ", body.get_hp())

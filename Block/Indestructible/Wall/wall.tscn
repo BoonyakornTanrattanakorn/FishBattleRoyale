@@ -1,39 +1,21 @@
-[gd_scene format=3 uid="uid://dwxmmqtoe12ao"]
+[gd_scene format=3 uid="uid://bamiq1bptgdtt"]
 
 [ext_resource type="Texture2D" uid="uid://dr34ytbcawg4e" path="res://Assets/tf_atlantis_tiles.png" id="1_07dip"]
-[ext_resource type="Script" uid="uid://cpg88juktfmja" path="res://Block/Indestructible/Wall/wall.gd" id="1_66drq"]
-[ext_resource type="Resource" uid="uid://cel88eiyykk3f" path="res://Resources/bomb_up.tres" id="2_53adx"]
-[ext_resource type="Resource" uid="uid://bymrmostgoifm" path="res://Resources/fire_up.tres" id="3_4bc5v"]
-[ext_resource type="Resource" uid="uid://bswqao73qf2ek" path="res://Resources/speed_up.tres" id="4_3mwbc"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_66drq"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_osqmh"]
+size = Vector2(64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uif28"]
 atlas = ExtResource("1_07dip")
-region = Rect2(272, 160, 32, 32)
+region = Rect2(288, 96, 16, 16)
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_4714m"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_66drq")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}]
+[node name="Wall" type="StaticBody2D" unique_id=222715521]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_vvkjj"]
-size = Vector2(32, 32)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1908329205]
+position = Vector2(32, 32)
+shape = SubResource("RectangleShape2D_osqmh")
 
-[node name="WallTile" type="StaticBody2D" unique_id=64812677]
-collision_layer = 4
-script = ExtResource("1_66drq")
-bomb_up_res = ExtResource("2_53adx")
-fire_up_res = ExtResource("3_4bc5v")
-speed_up_res = ExtResource("4_3mwbc")
-
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1981768583]
-sprite_frames = SubResource("SpriteFrames_4714m")
-autoplay = "default"
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1589653048]
-shape = SubResource("RectangleShape2D_vvkjj")
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=937862292]
+position = Vector2(32, 32)
+scale = Vector2(4, 4)
+texture = SubResource("AtlasTexture_uif28")

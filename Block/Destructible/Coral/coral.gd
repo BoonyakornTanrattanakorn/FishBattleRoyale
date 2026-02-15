@@ -1,6 +1,6 @@
-extends StaticBody2D
+extends DestructibleBlock
 
-class_name BrickWall
+class_name Coral
 
 const POWER_UP_SCENE = preload("res://PowerUp/power_up.tscn")
 
