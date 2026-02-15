@@ -10,6 +10,9 @@ region = Rect2(32, 16, 16, 16)
 [node name="MainMenu" type="Node2D"]
 script = ExtResource("1_menu")
 
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(640, 360)
+
 [node name="Background" type="Node2D" parent="."]
 
 [node name="BackgroundTexture" type="TextureRect" parent="Background"]
@@ -58,6 +61,15 @@ theme_override_colors/font_hover_color = Color(0.2, 0.8, 1, 1)
 theme_override_colors/font_pressed_color = Color(0.8, 0.9, 1, 1)
 theme_override_font_sizes/font_size = 24
 text = "Play"
+
+[node name="SettingsButton" type="Button" parent="CanvasLayer/MenuContainer"]
+custom_minimum_size = Vector2(200, 50)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 0.8, 0.2, 1)
+theme_override_colors/font_pressed_color = Color(1, 0.9, 0.6, 1)
+theme_override_font_sizes/font_size = 24
+text = "Settings"
 
 [node name="QuitButton" type="Button" parent="CanvasLayer/MenuContainer"]
 custom_minimum_size = Vector2(200, 50)

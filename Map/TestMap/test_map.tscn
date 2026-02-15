@@ -3,7 +3,6 @@
 [ext_resource type="PackedScene" uid="uid://dscfrnsvp82w" path="res://Character/Player/player.tscn" id="1_5wecu"]
 [ext_resource type="Script" uid="uid://cvxu7gj1okq4f" path="res://Map/TestMap/test_map.gd" id="1_ousxa"]
 [ext_resource type="Texture2D" uid="uid://dr34ytbcawg4e" path="res://Assets/tf_atlantis_tiles.png" id="2_atj0c"]
-[ext_resource type="PackedScene" uid="uid://dr44obu45lfr0" path="res://Character/Enemy/enemy.tscn" id="3_ousxa"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vq4t1"]
 atlas = ExtResource("2_atj0c")
@@ -21,19 +20,4 @@ texture = SubResource("AtlasTexture_vq4t1")
 stretch_mode = 1
 
 [node name="Player" parent="." unique_id=1074713579 instance=ExtResource("1_5wecu")]
-position = Vector2(589, 361)
-
-[node name="Enemy" parent="." unique_id=1910785464 instance=ExtResource("3_ousxa")]
-position = Vector2(157, 386)
-
-[node name="Enemy2" parent="." unique_id=1677314502 instance=ExtResource("3_ousxa")]
-position = Vector2(259, 209)
-
-[node name="Enemy3" parent="." unique_id=1689596023 instance=ExtResource("3_ousxa")]
-position = Vector2(942, 561)
-
-[node name="Enemy4" parent="." unique_id=2116228283 instance=ExtResource("3_ousxa")]
-position = Vector2(394, 545)
-
-[node name="Enemy5" parent="." unique_id=603648085 instance=ExtResource("3_ousxa")]
-position = Vector2(825, 164)
+position = Vector2(128, 128)

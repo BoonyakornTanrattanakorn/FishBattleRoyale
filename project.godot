@@ -23,6 +23,7 @@ config/icon="res://icon.svg"
 
 Utils="*uid://csnmcpm0vyjg1"
 Config="*uid://dw0yqdoabj7md"
+GameStats="*res://Global/game_stats.gd"
 
 [display]
 

@@ -11,7 +11,9 @@ signal healthChanged
 
 func _ready() -> void:
 	super()
-	heart_container.setMaxHearts(3)
+	set_max_hp(Config.player_hp)
+	set_hp(Config.player_hp)
+	heart_container.setMaxHearts(Config.player_hp)
 	heart_container.updateHearts(get_hp())
 	healthChanged.connect(heart_container.updateHearts)
 	
@@ -66,10 +68,16 @@ func start_invincible():
 
 
 func die():
+	if is_dead:
+		return
+	is_dead = true
 	print("player died")
+	GameStats.stop_game()
+	get_tree().change_scene_to_file("res://UI/game_over.tscn")
 
 
 func _on_area_entered(area: Area2D):
 	if area is PowerUp:
+		GameStats.add_powerup()
 		power_up_system.enable_power_up(area.type)
 		area.queue_free()

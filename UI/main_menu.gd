@@ -2,7 +2,9 @@ extends Node2D
 
 @onready var background_texture: TextureRect = $Background/BackgroundTexture
 @onready var play_button: Button = $CanvasLayer/MenuContainer/PlayButton
+@onready var settings_button: Button = $CanvasLayer/MenuContainer/SettingsButton
 @onready var quit_button: Button = $CanvasLayer/MenuContainer/QuitButton
+@onready var camera: Camera2D = $Camera2D
 
 var enemy_scene := preload("res://Character/Enemy/enemy.tscn")
 var wall_tile := preload("res://Block/Indestructible/Wall/wall.tscn")
@@ -11,6 +13,9 @@ var coral_tile := preload("res://Block/Destructible/Coral/coral.tscn")
 var map_size := Vector2i(20, 20)
 var coral_chance := 0.2
 var enemy_count := 8
+
+var camera_move_duration := 5.0
+var camera_wait_time := 2.0
 
 func _ready() -> void:
 	randomize()
@@ -42,7 +47,11 @@ func _ready() -> void:
 	
 	# Connect buttons
 	play_button.pressed.connect(_on_play_pressed)
+	settings_button.pressed.connect(_on_settings_pressed)
 	quit_button.pressed.connect(_on_quit_pressed)
+	
+	# Start camera movement
+	start_camera_movement()
 
 
 func spawn_enemies() -> void:
@@ -60,6 +69,7 @@ func spawn_enemies() -> void:
 			valid_pos = true
 		
 		enemy.position = Vector2(spawn_x, spawn_y) * Config.tile_size
+		enemy.menu_mode = true  # Disable bombs in menu
 		add_child(enemy)
 
 
@@ -67,5 +77,35 @@ func _on_play_pressed() -> void:
 	get_tree().change_scene_to_file("res://Map/TestMap/test_map.tscn")
 
 
+func _on_settings_pressed() -> void:
+	get_tree().change_scene_to_file("res://UI/settings_menu.tscn")
+
+
 func _on_quit_pressed() -> void:
 	get_tree().quit()
+
+
+func start_camera_movement() -> void:
+	# Set initial camera position
+	camera.position = get_random_camera_position()
+	camera_movement_loop()
+
+
+func camera_movement_loop() -> void:
+	while true:
+		await get_tree().create_timer(camera_wait_time).timeout
+		
+		var target_pos := get_random_camera_position()
+		var tween := create_tween()
+		tween.set_ease(Tween.EASE_IN_OUT)
+		tween.set_trans(Tween.TRANS_SINE)
+		tween.tween_property(camera, "position", target_pos, camera_move_duration)
+		await tween.finished
+
+
+func get_random_camera_position() -> Vector2:
+	# Keep camera within map bounds with some margin
+	var margin := 3
+	var x := randi_range(margin, map_size.x - margin)
+	var y := randi_range(margin, map_size.y - margin)
+	return Vector2(x, y) * Config.tile_size

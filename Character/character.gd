@@ -7,10 +7,11 @@ var animation_speed := 3.0
 var moving := false
 
 var hp := 3
-const MAX_HP := 3
+var max_hp := 3
 
 var invincible := false
 var invincible_time := 1.0
+var is_dead := false
 
 var max_bombs := 1
 
@@ -46,7 +47,7 @@ func move(dir: Vector2) -> void:
 # ---------------- HP SYSTEM ----------------
 
 func reduce_hp():
-	if invincible:
+	if invincible or is_dead:
 		return
 
 	set_hp(hp - 1)
@@ -64,12 +65,19 @@ func start_invincible():
 
 
 func die():
+	if is_dead:
+		return
+	is_dead = true
 	queue_free()
 
 
 func set_hp(value: int):
-	hp = clamp(value, 0, MAX_HP)
+	hp = clamp(value, 0, max_hp)
 
 
 func get_hp() -> int:
 	return hp
+
+
+func set_max_hp(value: int):
+	max_hp = value

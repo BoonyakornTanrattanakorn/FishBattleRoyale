@@ -11,10 +11,13 @@ const DIRECTIONS = [
 @onready var bomb_placement_system: Node = $BombPlacementSystem
 
 var think_time := 0.5
+var menu_mode := false  # Disable bomb placement in menus
 
 
-func _ready():
+func _ready() -> void:
 	super()
+	set_max_hp(Config.enemy_hp)
+	set_hp(Config.enemy_hp)
 	ai_loop()
 
 
@@ -33,8 +36,8 @@ func think():
 	else:
 		move(DIRECTIONS.pick_random())
 
-	# Random bomb chance
-	if randf() < 0.3:
+	# Random bomb chance (only in game, not in menu)
+	if not menu_mode and randf() < 0.3:
 		bomb_placement_system.place_bomb()
 
 
@@ -66,3 +69,11 @@ func get_closest_player() -> Character:
 			closest = p
 
 	return closest
+
+
+func die():
+	if is_dead:
+		return
+	is_dead = true
+	GameStats.add_kill()
+	queue_free()
