@@ -1,0 +1,69 @@
+[gd_scene load_steps=3 format=3 uid="uid://cw8yxvn5mbwpr"]
+
+[ext_resource type="Script" path="res://UI/main_menu.gd" id="1_menu"]
+[ext_resource type="Texture2D" uid="uid://dr34ytbcawg4e" path="res://Assets/tf_atlantis_tiles.png" id="2_tiles"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bg"]
+atlas = ExtResource("2_tiles")
+region = Rect2(32, 16, 16, 16)
+
+[node name="MainMenu" type="Node2D"]
+script = ExtResource("1_menu")
+
+[node name="Background" type="Node2D" parent="."]
+
+[node name="BackgroundTexture" type="TextureRect" parent="Background"]
+offset_right = 64.0
+offset_bottom = 64.0
+texture = SubResource("AtlasTexture_bg")
+stretch_mode = 1
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="MenuContainer" type="VBoxContainer" parent="CanvasLayer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -150.0
+offset_right = 150.0
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="Title" type="Label" parent="CanvasLayer/MenuContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.8, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 3
+theme_override_constants/shadow_offset_y = 3
+theme_override_font_sizes/font_size = 48
+text = "Fish Battle Royale"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Spacer" type="Control" parent="CanvasLayer/MenuContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+
+[node name="PlayButton" type="Button" parent="CanvasLayer/MenuContainer"]
+custom_minimum_size = Vector2(200, 50)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(0.2, 0.8, 1, 1)
+theme_override_colors/font_pressed_color = Color(0.8, 0.9, 1, 1)
+theme_override_font_sizes/font_size = 24
+text = "Play"
+
+[node name="QuitButton" type="Button" parent="CanvasLayer/MenuContainer"]
+custom_minimum_size = Vector2(200, 50)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 0.4, 0.4, 1)
+theme_override_colors/font_pressed_color = Color(1, 0.6, 0.6, 1)
+theme_override_font_sizes/font_size = 24
+text = "Quit"
