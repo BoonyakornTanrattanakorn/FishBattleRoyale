@@ -8,12 +8,16 @@ signal healthChanged
 @onready var power_up_system: Node = $PowerUpSystem
 
 @onready var heart_container: HBoxContainer = $CanvasLayer/heartContainer
+@onready var powerup_display: HBoxContainer = $CanvasLayer/PowerupDisplay
 
 func _ready() -> void:
 	super()
-	heart_container.setMaxHearts(3)
+	set_max_hp(Config.player_hp)
+	set_hp(Config.player_hp)
+	heart_container.setMaxHearts(Config.player_hp)
 	heart_container.updateHearts(get_hp())
 	healthChanged.connect(heart_container.updateHearts)
+	power_up_system.powerups_changed.connect(powerup_display.update_display)
 	
 func _input(_event):
 	if moving:
@@ -66,10 +70,16 @@ func start_invincible():
 
 
 func die():
+	if is_dead:
+		return
+	is_dead = true
 	print("player died")
+	GameStats.stop_game()
+	get_tree().change_scene_to_file("res://UI/game_over.tscn")
 
 
 func _on_area_entered(area: Area2D):
 	if area is PowerUp:
+		GameStats.add_powerup()
 		power_up_system.enable_power_up(area.type)
 		area.queue_free()

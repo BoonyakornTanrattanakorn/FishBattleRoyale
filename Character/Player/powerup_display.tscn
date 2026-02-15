@@ -1,0 +1,63 @@
+[gd_scene format=3 uid="uid://boabroq8g6da8"]
+
+[ext_resource type="Script" path="res://Character/Player/powerup_display.gd" id="1_powerup"]
+[ext_resource type="Texture2D" uid="uid://cmkjqujyrj0bh" path="res://Assets/bomb_up.png" id="2_bomb"]
+[ext_resource type="Texture2D" uid="uid://c8j5uxvksa32r" path="res://Assets/fire_up.png" id="3_fire"]
+[ext_resource type="Texture2D" uid="uid://btnf2nuhd8xxq" path="res://Assets/speed_up.png" id="4_speed"]
+
+[node name="PowerupDisplay" type="HBoxContainer" unique_id=678162688]
+offset_right = 193.0
+offset_bottom = 34.0
+theme_override_constants/separation = 20
+script = ExtResource("1_powerup")
+
+[node name="BombCount" type="HBoxContainer" parent="." unique_id=1484104632]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Icon" type="TextureRect" parent="BombCount" unique_id=44744053]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("2_bomb")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Value" type="Label" parent="BombCount" unique_id=2124476965]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "0"
+vertical_alignment = 1
+
+[node name="FireCount" type="HBoxContainer" parent="." unique_id=2113127579]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Icon" type="TextureRect" parent="FireCount" unique_id=1704023095]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("3_fire")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Value" type="Label" parent="FireCount" unique_id=1308416379]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "0"
+vertical_alignment = 1
+
+[node name="SpeedCount" type="HBoxContainer" parent="." unique_id=238231160]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Icon" type="TextureRect" parent="SpeedCount" unique_id=476685778]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("4_speed")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Value" type="Label" parent="SpeedCount" unique_id=821569629]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "0"
+vertical_alignment = 1
