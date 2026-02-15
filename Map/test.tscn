@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://dr34ytbcawg4e" path="res://Assets/tf_atlantis_tiles.png" id="1_3d36u"]
 [ext_resource type="PackedScene" uid="uid://dscfrnsvp82w" path="res://Character/Player/player.tscn" id="2_lhw50"]
-[ext_resource type="PackedScene" uid="uid://dwxmmqtoe12ao" path="res://Block/Indestructible/Wall/wall.tscn" id="3_0q0wn"]
+[ext_resource type="PackedScene" uid="uid://dwxmmqtoe12ao" path="res://Block/Destructible/Coral/coral.tscn" id="3_0q0wn"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_bo1nx"]
 texture = ExtResource("1_3d36u")
