@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://ci3rbsupfrilr" path="res://Bomb/bomb_placement_system.gd" id="4_vgqql"]
 [ext_resource type="PackedScene" uid="uid://cvon06jsd7m25" path="res://Character/Player/heart_container.tscn" id="5_1spju"]
 [ext_resource type="Script" uid="uid://bbmakuws150p6" path="res://PowerUp/power_up_system.gd" id="5_fkybt"]
+[ext_resource type="PackedScene" uid="uid://boabroq8g6da8" path="res://Character/Player/powerup_display.tscn" id="6_powerup"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_cvnsp"]
 atlas = ExtResource("1_v0iea")
@@ -34,6 +35,13 @@ transform = Transform2D(3, 0, 0, 3, 0, 0)
 
 [node name="heartContainer" parent="CanvasLayer" unique_id=363770908 instance=ExtResource("5_1spju")]
 
+[node name="PowerupDisplay" parent="CanvasLayer" unique_id=123456789 instance=ExtResource("6_powerup")]
+offset_left = 1.6666669
+offset_top = 200.33334
+offset_right = 194.66667
+offset_bottom = 234.33334
+scale = Vector2(0.4, 0.4)
+
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=879305106]
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_6t5aa")
@@ -61,4 +69,5 @@ one_shot = true
 [node name="Camera2D" type="Camera2D" parent="." unique_id=684116910]
 
 [connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="powerups_changed" from="PowerUpSystem" to="CanvasLayer/PowerupDisplay" method="update_display"]
 [connection signal="timeout" from="PowerUpSystem/SpeedUpTimer" to="PowerUpSystem" method="_on_speed_up_timer_timeout"]

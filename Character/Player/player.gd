@@ -8,6 +8,7 @@ signal healthChanged
 @onready var power_up_system: Node = $PowerUpSystem
 
 @onready var heart_container: HBoxContainer = $CanvasLayer/heartContainer
+@onready var powerup_display: HBoxContainer = $CanvasLayer/PowerupDisplay
 
 func _ready() -> void:
 	super()
@@ -16,6 +17,7 @@ func _ready() -> void:
 	heart_container.setMaxHearts(Config.player_hp)
 	heart_container.updateHearts(get_hp())
 	healthChanged.connect(heart_container.updateHearts)
+	power_up_system.powerups_changed.connect(powerup_display.update_display)
 	
 func _input(_event):
 	if moving:
