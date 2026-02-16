@@ -41,6 +41,11 @@ func move(dir):
 	ray.target_position = dir * Config.tile_size
 	ray.force_raycast_update()
 	if !ray.is_colliding():
+		# Cancel invincibility when moving
+		if invincible:
+			invincible = false
+			animated_sprite_2d.modulate.a = 1.0
+		
 		var tween = create_tween()
 		tween.tween_property(self, "position",
 			position + dir * Config.tile_size, 1.0/animation_speed).set_trans(Tween.TRANS_SINE)

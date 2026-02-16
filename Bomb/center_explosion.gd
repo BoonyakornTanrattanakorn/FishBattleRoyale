@@ -60,7 +60,10 @@ func calculate_size_of_explosion(raycast: RayCast2D):
 		var collision_point = raycast.get_collision_point()
 		
 		var distance_to_collider = raycast.global_position.distance_to(collision_point)
-		var size_of_explosion_before_collider = max(roundi(absf(distance_to_collider)/ Config.tile_size - 1), 0)
+		# Calculate how many complete tiles are between bomb and wall
+		# Add small epsilon to handle floating point precision, then floor to get complete tiles
+		var tiles_distance = floor((distance_to_collider + 0.1) / Config.tile_size)
+		var size_of_explosion_before_collider = max(int(tiles_distance), 0)
 		return size_of_explosion_before_collider
 
 func execute_explosion_collision(collider: Object):

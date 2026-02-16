@@ -31,6 +31,9 @@ func move(dir: Vector2) -> void:
 	if ray.is_colliding():
 		return
 
+	# Cancel invincibility when moving
+	invincible = false
+
 	var tween := create_tween()
 	tween.tween_property(
 		self,
