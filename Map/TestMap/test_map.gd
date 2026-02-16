@@ -6,6 +6,7 @@ var wall_tile := preload("res://Block/Indestructible/Wall/wall.tscn")
 var enemy_scene := preload("res://Character/Enemy/enemy.tscn")
 
 var coral_chance := 0.3
+var wall_chance := 0.15
 var check_timer := 0.0
 var check_interval := 1.0  # Check for win every second
 
@@ -33,7 +34,16 @@ func _ready() -> void:
 				wall.position = pos
 				add_child(wall)
 
-			# ---- Interior coral ----
+			# ---- Keep player spawn area clear (top-left corner) ----
+			elif (x >= 1 and x <= 3) and (y >= 1 and y <= 3):
+				# Keep spawn area clear - no walls or coral
+				pass
+
+			# ---- Interior tiles ----
+			elif randf() < wall_chance:
+				var wall := wall_tile.instantiate()
+				wall.position = pos
+				add_child(wall)
 			elif randf() < coral_chance:
 				var coral := coral_tile.instantiate()
 				coral.position = pos
@@ -47,12 +57,37 @@ func spawn_enemies() -> void:
 	for i in range(Config.enemy_count):
 		var enemy := enemy_scene.instantiate()
 		
-		# Find a random valid spawn position
-		var spawn_x := randi_range(2, Config.map_size.x - 3)
-		var spawn_y := randi_range(2, Config.map_size.y - 3)
+		# Find a random valid spawn position (avoid player spawn area)
+		var spawn_x: int
+		var spawn_y: int
+		var attempts := 0
+		const MAX_ATTEMPTS := 100
 		
-		enemy.position = Vector2(spawn_x, spawn_y) * Config.tile_size
-		add_child(enemy)
+		# Keep trying until we find a clear spot
+		while attempts < MAX_ATTEMPTS:
+			spawn_x = randi_range(2, Config.map_size.x - 3)
+			spawn_y = randi_range(2, Config.map_size.y - 3)
+			
+			# Avoid player spawn area (top-left)
+			if (spawn_x >= 1 and spawn_x <= 3) and (spawn_y >= 1 and spawn_y <= 3):
+				attempts += 1
+				continue
+			
+			# Check if position is clear (no blocks)
+			var spawn_pos = Vector2(spawn_x, spawn_y) * Config.tile_size
+			var space_state := get_world_2d().direct_space_state
+			var query := PhysicsPointQueryParameters2D.new()
+			query.position = spawn_pos + Vector2(Config.tile_size / 2, Config.tile_size / 2)
+			query.collision_mask = 1  # Check for blocks
+			
+			var result := space_state.intersect_point(query)
+			if result.is_empty():
+				# Position is clear
+				enemy.position = spawn_pos
+				add_child(enemy)
+				break
+			
+			attempts += 1
 
 
 func _process(delta: float) -> void:
