@@ -46,6 +46,9 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_u8wor"]
+size = Vector2(64, 64)
+
 [node name="Bomb" type="Area2D" unique_id=2033420062 groups=["bombs"]]
 collision_layer = 8
 script = ExtResource("1_kdyat")
@@ -60,5 +63,8 @@ frame_progress = 0.0026652638
 wait_time = 3.0
 one_shot = true
 autostart = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=146352777]
+shape = SubResource("RectangleShape2D_u8wor")
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

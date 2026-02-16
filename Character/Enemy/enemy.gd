@@ -10,9 +10,9 @@ const DIRECTIONS = [
 
 @onready var bomb_placement_system: Node = $BombPlacementSystem
 
-var think_time := 0.5
+var think_time := 1.0
 var menu_mode := false  # Disable bomb placement in menus
-var bomb_avoidance_distance := 3.0  # tiles to avoid bombs
+var bomb_avoidance_distance := 2.0  # tiles to avoid bombs
 
 
 func _ready() -> void:
@@ -23,13 +23,13 @@ func _ready() -> void:
 	# Adjust AI based on difficulty
 	match Config.difficulty:
 		"Easy":
-			think_time = 0.7
+			think_time = 1.0
 			bomb_avoidance_distance = 2.0
 		"Normal":
-			think_time = 0.5
+			think_time = 0.7
 			bomb_avoidance_distance = 3.0
 		"Hard":
-			think_time = 0.3
+			think_time = 0.5
 			bomb_avoidance_distance = 4.0
 	
 	ai_loop()
