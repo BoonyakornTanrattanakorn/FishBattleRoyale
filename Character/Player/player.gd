@@ -1,11 +1,24 @@
 extends Character
 class_name Player
 
+signal healthChanged
+
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 @onready var bomb_placement_system: BombPlacementSystem = $BombPlacementSystem
 @onready var power_up_system: Node = $PowerUpSystem
 
+@onready var heart_container: HBoxContainer = $CanvasLayer/heartContainer
+@onready var powerup_display: HBoxContainer = $CanvasLayer/PowerupDisplay
 
+func _ready() -> void:
+	super()
+	set_max_hp(Config.player_hp)
+	set_hp(Config.player_hp)
+	heart_container.setMaxHearts(Config.player_hp)
+	heart_container.updateHearts(get_hp())
+	healthChanged.connect(heart_container.updateHearts)
+	power_up_system.powerups_changed.connect(powerup_display.update_display)
+	
 func _input(_event):
 	if moving:
 		return
@@ -24,6 +37,22 @@ func _input(_event):
 	if Input.is_action_just_pressed("PlaceBomb"):
 		bomb_placement_system.place_bomb()
 
+func move(dir):
+	ray.target_position = dir * Config.tile_size
+	ray.force_raycast_update()
+	if !ray.is_colliding():
+		var tween = create_tween()
+		tween.tween_property(self, "position",
+			position + dir * Config.tile_size, 1.0/animation_speed).set_trans(Tween.TRANS_SINE)
+		moving = true
+		await tween.finished
+		moving = false
+		
+func reduce_hp():
+	set_hp(get_hp()-1)
+	healthChanged.emit(hp)
+	if get_hp() <= 0:
+		die()
 
 # Override invincible for blinking
 func start_invincible():
@@ -41,10 +70,16 @@ func start_invincible():
 
 
 func die():
+	if is_dead:
+		return
+	is_dead = true
 	print("player died")
+	GameStats.stop_game()
+	get_tree().change_scene_to_file("res://UI/game_over.tscn")
 
 
 func _on_area_entered(area: Area2D):
 	if area is PowerUp:
+		GameStats.add_powerup()
 		power_up_system.enable_power_up(area.type)
 		area.queue_free()

@@ -10,7 +10,7 @@ const POWER_UP_SCENE = preload("res://PowerUp/power_up.tscn")
 
 func destroy():
 	
-	if (randf() <= 0.35): # Spawning percentage
+	if (randf() <= Config.item_drop_chance): # Spawning percentage
 		spawn_power_up()
 		
 	queue_free()
