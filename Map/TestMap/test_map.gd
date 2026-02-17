@@ -10,6 +10,9 @@ var wall_chance := 0.15
 var check_timer := 0.0
 var check_interval := 1.0  # Check for win every second
 
+# Toxic zone system
+var toxic_zone: Node2D
+
 func _ready() -> void:
 	randomize()
 	
@@ -51,6 +54,9 @@ func _ready() -> void:
 	
 	# Spawn enemies based on config
 	spawn_enemies()
+	
+	# Initialize toxic zone system
+	setup_toxic_zone()
 
 
 func spawn_enemies() -> void:
@@ -96,6 +102,38 @@ func _process(delta: float) -> void:
 	if check_timer >= check_interval:
 		check_timer = 0.0
 		check_win_condition()
+
+
+func setup_toxic_zone() -> void:
+	if not Config.toxic_zone_enabled:
+		return
+	
+	# Load and create toxic zone system
+	var ToxicZoneClass := load("res://Map/toxic_zone_system.gd")
+	toxic_zone = ToxicZoneClass.new()
+	toxic_zone.first_wave_delay = Config.toxic_zone_first_wave
+	toxic_zone.spread_interval = Config.toxic_zone_wave_interval
+	toxic_zone.spread_chance = Config.toxic_zone_spread_chance
+	toxic_zone.damage_per_tick = Config.toxic_zone_damage
+	
+	# Connect signals for feedback
+	toxic_zone.zone_advanced.connect(_on_zone_advanced)
+	toxic_zone.player_in_toxic_zone.connect(_on_player_in_toxic_zone)
+	
+	add_child(toxic_zone)
+
+
+func _on_zone_advanced(wave_number: int) -> void:
+	if wave_number == 1:
+		print("=== TOXIC BORDER SPAWNED ===")
+	else:
+		print("=== TOXIC SPREADING: Layer ", wave_number, " ===")
+	print("Safe area: ", toxic_zone.get_safe_area_percentage(), "%")
+
+
+func _on_player_in_toxic_zone() -> void:
+	# Could add visual/audio feedback here
+	pass
 
 
 func check_win_condition() -> void:

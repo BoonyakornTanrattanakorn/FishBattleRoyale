@@ -12,6 +12,7 @@ signal healthChanged
 
 func _ready() -> void:
 	super()
+	add_to_group("player")  # For toxic zone detection
 	set_max_hp(Config.player_hp)
 	set_hp(Config.player_hp)
 	heart_container.setMaxHearts(Config.player_hp)

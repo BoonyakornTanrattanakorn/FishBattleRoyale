@@ -17,6 +17,7 @@ var bomb_avoidance_distance := 2.0  # tiles to avoid bombs
 
 func _ready() -> void:
 	super()
+	add_to_group("enemies")  # For toxic zone damage and tracking
 	set_max_hp(Config.enemy_hp)
 	set_hp(Config.enemy_hp)
 	
@@ -130,7 +131,19 @@ func can_move_in_direction(dir: Vector2) -> bool:
 		if character.position.distance_to(target_pos) < Config.tile_size * 0.5:
 			return false
 	
+	# Avoid toxic zones if possible
+	if is_position_toxic(target_pos):
+		return false
+	
 	return true
+
+
+func is_position_toxic(pos: Vector2) -> bool:
+	# Check with toxic zone system if it exists
+	var toxic_zone = get_tree().get_first_node_in_group("toxic_zone")
+	if toxic_zone and toxic_zone.has_method("is_position_toxic"):
+		return toxic_zone.is_position_toxic(pos)
+	return false
 
 
 func get_danger_direction() -> Vector2:

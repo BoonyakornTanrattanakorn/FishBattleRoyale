@@ -12,6 +12,13 @@ var player_hp := 3
 var enemy_hp := 3
 var item_drop_chance := 0.3
 
+# Battle Royale Zone Settings
+var toxic_zone_enabled := true
+var toxic_zone_first_wave := 5.0  # Seconds before border appears
+var toxic_zone_wave_interval := 2.0  # Seconds between each spread
+var toxic_zone_spread_chance := 0.5  # Chance for each tile to spread (0.0-1.0)
+var toxic_zone_damage := 1  # Damage per tick
+
 func _ready() -> void:
 	apply_difficulty()
 
