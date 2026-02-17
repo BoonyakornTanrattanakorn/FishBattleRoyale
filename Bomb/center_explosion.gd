@@ -20,7 +20,7 @@ var animation_dirs: Array[Vector2] = [
 const DIRECTIONAL_EXPLOSION = preload("res://Bomb/directional_explosion.tscn")
 
 # Explosion size for all directions
-@export var size = 1
+var size = 1
 
 func _ready() -> void:
 	check_reycasts()
