@@ -20,7 +20,7 @@ var animation_dirs: Array[Vector2] = [
 const DIRECTIONAL_EXPLOSION = preload("res://Bomb/directional_explosion.tscn")
 
 # Explosion size for all directions
-var size = 1
+@export var size = 1
 
 func _ready() -> void:
 	check_reycasts()
@@ -32,10 +32,12 @@ func check_reycasts():
 func check_raycast_for_direction(animation_name: String, raycast: RayCast2D, animation_dir: Vector2):
 	raycast.target_position = raycast.target_position * size
 	raycast.force_raycast_update()
+	
 	if !raycast.is_colliding():
 		create_explosion_for_size(size, animation_name, animation_dir)
 	else:
 		var size_of_explosion = calculate_size_of_explosion(raycast)
+		
 		var collider = raycast.get_collider()
 		if size_of_explosion != null:
 			create_explosion_for_size(size_of_explosion, animation_name, animation_dir)
@@ -56,7 +58,7 @@ func create_explosion_animation_slice(animation_name: String, animation_pos: Vec
 
 func calculate_size_of_explosion(raycast: RayCast2D):
 	var collider = raycast.get_collider()
-	if collider is TileMapLayer:
+	if collider is Block or collider is Wall:
 		var collision_point = raycast.get_collision_point()
 		
 		var distance_to_collider = raycast.global_position.distance_to(collision_point)

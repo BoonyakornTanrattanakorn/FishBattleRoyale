@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://bamiq1bptgdtt"]
 
 [ext_resource type="Texture2D" uid="uid://dr34ytbcawg4e" path="res://Assets/tf_atlantis_tiles.png" id="1_07dip"]
+[ext_resource type="Script" uid="uid://djvosrdm7ikfe" path="res://Block/Indestructible/Wall/wall.gd" id="1_uif28"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_osqmh"]
 size = Vector2(64, 64)
@@ -10,6 +11,8 @@ atlas = ExtResource("1_07dip")
 region = Rect2(288, 96, 16, 16)
 
 [node name="Wall" type="StaticBody2D" unique_id=222715521]
+collision_layer = 2
+script = ExtResource("1_uif28")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1908329205]
 position = Vector2(32, 32)

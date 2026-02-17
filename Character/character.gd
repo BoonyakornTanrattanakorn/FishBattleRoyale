@@ -63,6 +63,8 @@ func reduce_hp():
 
 func start_invincible():
 	invincible = true
+	if is_dead:
+		return
 	await get_tree().create_timer(invincible_time).timeout
 	invincible = false
 

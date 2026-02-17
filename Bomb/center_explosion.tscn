@@ -58,22 +58,22 @@ shape = SubResource("RectangleShape2D_qflv0")
 [node name="Raycasts" type="Node2D" parent="." unique_id=1801374017]
 
 [node name="RayCastUp" type="RayCast2D" parent="Raycasts" unique_id=981319581]
-target_position = Vector2(0, -32)
+target_position = Vector2(0, -64)
 collision_mask = 6
 collide_with_areas = true
 
 [node name="RayCastRight" type="RayCast2D" parent="Raycasts" unique_id=202208448]
-target_position = Vector2(32, 0)
+target_position = Vector2(64, 0)
 collision_mask = 6
 collide_with_areas = true
 
 [node name="RayCastDown" type="RayCast2D" parent="Raycasts" unique_id=340372992]
-target_position = Vector2(0, 32)
+target_position = Vector2(0, 64)
 collision_mask = 6
 collide_with_areas = true
 
 [node name="RayCastLeft" type="RayCast2D" parent="Raycasts" unique_id=1756915658]
-target_position = Vector2(-32, 0)
+target_position = Vector2(-64, 0)
 collision_mask = 6
 collide_with_areas = true
 
