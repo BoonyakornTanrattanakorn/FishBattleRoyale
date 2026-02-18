@@ -395,7 +395,13 @@ func check_win_condition() -> void:
 		if alive_players == 1 and winning_player and all_enemies_dead:
 			# Server tells the winning player to show win screen
 			print("Win condition met - winner: ", winning_player.player_name)
-			_show_win_screen.rpc_id(winning_player.peer_id)
+			if winning_player.peer_id == 1:
+				# Host/server is the winner - call directly
+				GameStats.stop_game()
+				get_tree().change_scene_to_file("res://UI/game_win.tscn")
+			else:
+				# Client is the winner - send RPC
+				_show_win_screen.rpc_id(winning_player.peer_id)
 		# All players dead = no winner (shouldn't happen with spectator mode)
 		elif alive_players == 0:
 			print("All players dead - game over")
