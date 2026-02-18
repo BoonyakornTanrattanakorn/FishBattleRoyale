@@ -5,8 +5,8 @@ var coral_tile := preload("res://Block/Destructible/Coral/coral.tscn")
 var wall_tile := preload("res://Block/Indestructible/Wall/wall.tscn")
 var enemy_scene := preload("res://Character/Enemy/enemy.tscn")
 
-var coral_chance := 0.3
-var wall_chance := 0.15
+var coral_chance := 0.5
+var wall_chance := 0.1
 var check_timer := 0.0
 var check_interval := 1.0  # Check for win every second
 
@@ -52,6 +52,9 @@ func _ready() -> void:
 				coral.position = pos
 				add_child(coral)
 	
+	# Wait for physics to update before spawning enemies
+	await get_tree().physics_frame
+	
 	# Spawn enemies based on config
 	spawn_enemies()
 	
@@ -79,12 +82,14 @@ func spawn_enemies() -> void:
 				attempts += 1
 				continue
 			
-			# Check if position is clear (no blocks)
+			# Check if position is clear (no blocks or other entities)
 			var spawn_pos = Vector2(spawn_x, spawn_y) * Config.tile_size
 			var space_state := get_world_2d().direct_space_state
 			var query := PhysicsPointQueryParameters2D.new()
 			query.position = spawn_pos + Vector2(Config.tile_size / 2, Config.tile_size / 2)
-			query.collision_mask = 1  # Check for blocks
+			query.collision_mask = 1  # Check for blocks (collision layer 1)
+			query.collide_with_areas = false
+			query.collide_with_bodies = true
 			
 			var result := space_state.intersect_point(query)
 			if result.is_empty():

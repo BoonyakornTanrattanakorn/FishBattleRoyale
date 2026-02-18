@@ -42,6 +42,9 @@ func _ready() -> void:
 				coral.position = pos
 				add_child(coral)
 	
+	# Wait for physics to update before spawning enemies
+	await get_tree().physics_frame
+	
 	# Spawn enemies
 	spawn_enemies()
 	
@@ -58,19 +61,35 @@ func spawn_enemies() -> void:
 	for i in range(enemy_count):
 		var enemy := enemy_scene.instantiate()
 		
-		# Find a random valid spawn position
-		var valid_pos := false
-		var spawn_x := 0
-		var spawn_y := 0
+		# Find a random valid spawn position (no walls/coral)
+		var spawn_x: int
+		var spawn_y: int
+		var attempts := 0
+		const MAX_ATTEMPTS := 100
 		
-		while not valid_pos:
+		# Keep trying until we find a clear spot
+		while attempts < MAX_ATTEMPTS:
 			spawn_x = randi_range(1, map_size.x - 2)
 			spawn_y = randi_range(1, map_size.y - 2)
-			valid_pos = true
-		
-		enemy.position = Vector2(spawn_x, spawn_y) * Config.tile_size
-		enemy.menu_mode = true  # Disable bombs in menu
-		add_child(enemy)
+			
+			# Check if position is clear (no blocks)
+			var spawn_pos = Vector2(spawn_x, spawn_y) * Config.tile_size
+			var space_state := get_world_2d().direct_space_state
+			var query := PhysicsPointQueryParameters2D.new()
+			query.position = spawn_pos + Vector2(Config.tile_size / 2, Config.tile_size / 2)
+			query.collision_mask = 1  # Check for blocks
+			query.collide_with_areas = false
+			query.collide_with_bodies = true
+			
+			var result := space_state.intersect_point(query)
+			if result.is_empty():
+				# Position is clear
+				enemy.position = spawn_pos
+				enemy.menu_mode = true  # Disable bombs in menu
+				add_child(enemy)
+				break
+			
+			attempts += 1
 
 
 func _on_play_pressed() -> void:

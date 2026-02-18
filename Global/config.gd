@@ -3,8 +3,8 @@ extends Node
 var tile_size = 64
 
 # Game settings
-var map_size := Vector2i(20, 20)
-var enemy_count := 10
+var map_size := Vector2i(30, 30)
+var enemy_count := 0.02 * map_size.x * map_size.y
 var difficulty := "Easy"  # Easy, Normal, Hard
 
 # Difficulty settings
@@ -31,7 +31,7 @@ func apply_difficulty() -> void:
 		"Normal":
 			player_hp = 3
 			enemy_hp = 3
-			item_drop_chance = 0.8
+			item_drop_chance = 1.0
 		"Hard":
 			player_hp = 2
 			enemy_hp = 4
