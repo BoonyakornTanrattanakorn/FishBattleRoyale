@@ -4,6 +4,7 @@ extends Node2D
 var coral_tile := preload("res://Block/Destructible/Coral/coral.tscn")
 var wall_tile := preload("res://Block/Indestructible/Wall/wall.tscn")
 var enemy_scene := preload("res://Character/Enemy/enemy.tscn")
+var player_scene := preload("res://Character/Player/player.tscn")
 
 var coral_chance := 0.5
 var wall_chance := 0.1
@@ -55,11 +56,70 @@ func _ready() -> void:
 	# Wait for physics to update before spawning enemies
 	await get_tree().physics_frame
 	
+	# Spawn players (multiplayer or single player)
+	spawn_players()
+	
 	# Spawn enemies based on config
 	spawn_enemies()
 	
 	# Initialize toxic zone system
 	setup_toxic_zone()
+
+
+func spawn_players() -> void:
+	if MultiplayerManager.is_multiplayer_active():
+		# Multiplayer mode - spawn all connected players
+		var spawn_positions = get_player_spawn_positions()
+		var spawn_idx = 0
+		
+		for peer_id in MultiplayerManager.players.keys():
+			if spawn_idx >= spawn_positions.size():
+				break
+			
+			var player = player_scene.instantiate()
+			player.position = spawn_positions[spawn_idx]
+			player.peer_id = peer_id
+			player.player_name = MultiplayerManager.get_player_name(peer_id)
+			player.name = "Player_" + str(peer_id)
+			add_child(player)
+			
+			spawn_idx += 1
+			
+		# Connect to multiplayer signals for late joiners
+		MultiplayerManager.player_connected.connect(_on_player_connected)
+		MultiplayerManager.player_disconnected.connect(_on_player_disconnected)
+	else:
+		# Single player mode - spawn one player
+		var player = player_scene.instantiate()
+		player.position = Vector2(2, 2) * Config.tile_size
+		player.peer_id = 1
+		player.player_name = "Player"
+		player.name = "Player_1"
+		add_child(player)
+
+
+func get_player_spawn_positions() -> Array[Vector2]:
+	# Define spawn positions in corners for up to 4 players
+	var positions: Array[Vector2] = [
+		Vector2(2, 2) * Config.tile_size,  # Top-left
+		Vector2(Config.map_size.x - 3, 2) * Config.tile_size,  # Top-right
+		Vector2(2, Config.map_size.y - 3) * Config.tile_size,  # Bottom-left
+		Vector2(Config.map_size.x - 3, Config.map_size.y - 3) * Config.tile_size  # Bottom-right
+	]
+	return positions
+
+
+func _on_player_connected(peer_id, player_info):
+	print("Player joined game: ", player_info["name"])
+	# Could spawn late joiners here if desired
+
+
+func _on_player_disconnected(peer_id):
+	print("Player left game: ", peer_id)
+	# Remove disconnected player
+	var player_node = get_node_or_null("Player_" + str(peer_id))
+	if player_node:
+		player_node.queue_free()
 
 
 func spawn_enemies() -> void:

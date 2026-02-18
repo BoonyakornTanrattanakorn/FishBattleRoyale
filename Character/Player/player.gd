@@ -9,27 +9,53 @@ signal healthChanged
 
 @onready var heart_container: HBoxContainer = $CanvasLayer/heartContainer
 @onready var powerup_display: HBoxContainer = $CanvasLayer/PowerupDisplay
+@onready var camera: Camera2D = $Camera2D
+@onready var name_label: Label = $NameLabel
+
+var peer_id: int = 1  # Multiplayer peer ID
+var player_name: String = "Player"
 
 func _ready() -> void:
 	super()
-	add_to_group("player")  # For toxic zone detection
+	add_to_group("players")  # For toxic zone detection
 	set_max_hp(Config.player_hp)
 	set_hp(Config.player_hp)
-	heart_container.setMaxHearts(Config.player_hp)
-	heart_container.updateHearts(get_hp())
-	healthChanged.connect(heart_container.updateHearts)
-	power_up_system.powerups_changed.connect(powerup_display.update_display)
+	
+	# Set multiplayer authority
+	set_multiplayer_authority(peer_id)
+	
+	# Setup UI - only show for local player
+	var is_local_player = is_multiplayer_authority()
+	camera.enabled = is_local_player
+	heart_container.visible = is_local_player
+	powerup_display.visible = is_local_player
+	
+	if is_local_player:
+		heart_container.setMaxHearts(Config.player_hp)
+		heart_container.updateHearts(get_hp())
+		healthChanged.connect(heart_container.updateHearts)
+		power_up_system.powerups_changed.connect(powerup_display.update_display)
+	
+	# Show player name
+	name_label.text = player_name
+	name_label.visible = true
 	
 func _input(_event):
+	# Only process input for the local player
+	if not is_multiplayer_authority():
+		return
+	
 	if moving:
 		return
 
 	if Input.is_action_pressed("Right"):
 		move(Vector2.RIGHT)
 		animated_sprite_2d.flip_h = false
+		sync_sprite_flip.rpc(false)
 	elif Input.is_action_pressed("Left"):
 		move(Vector2.LEFT)
 		animated_sprite_2d.flip_h = true
+		sync_sprite_flip.rpc(true)
 	elif Input.is_action_pressed("Up"):
 		move(Vector2.UP)
 	elif Input.is_action_pressed("Down"):
@@ -89,3 +115,9 @@ func _on_area_entered(area: Area2D):
 		GameStats.add_powerup()
 		power_up_system.enable_power_up(area.type)
 		area.queue_free()
+
+
+# ============= MULTIPLAYER SYNC =============
+@rpc("any_peer", "call_local")
+func sync_sprite_flip(flip: bool):
+	animated_sprite_2d.flip_h = flip

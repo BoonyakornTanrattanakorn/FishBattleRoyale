@@ -68,6 +68,19 @@ one_shot = true
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=684116910]
 
+[node name="NameLabel" type="Label" parent="."]
+offset_left = -50.0
+offset_top = -50.0
+offset_right = 50.0
+offset_bottom = -30.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 14
+text = "Player"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [connection signal="area_entered" from="." to="." method="_on_area_entered"]
 [connection signal="powerups_changed" from="PowerUpSystem" to="CanvasLayer/PowerupDisplay" method="update_display"]
 [connection signal="timeout" from="PowerUpSystem/SpeedUpTimer" to="PowerUpSystem" method="_on_speed_up_timer_timeout"]

@@ -2,6 +2,7 @@ extends Node2D
 
 @onready var background_texture: TextureRect = $Background/BackgroundTexture
 @onready var play_button: Button = $CanvasLayer/MenuContainer/PlayButton
+@onready var multiplayer_button: Button = $CanvasLayer/MenuContainer/MultiplayerButton
 @onready var settings_button: Button = $CanvasLayer/MenuContainer/SettingsButton
 @onready var quit_button: Button = $CanvasLayer/MenuContainer/QuitButton
 @onready var camera: Camera2D = $Camera2D
@@ -50,6 +51,7 @@ func _ready() -> void:
 	
 	# Connect buttons
 	play_button.pressed.connect(_on_play_pressed)
+	multiplayer_button.pressed.connect(_on_multiplayer_pressed)
 	settings_button.pressed.connect(_on_settings_pressed)
 	quit_button.pressed.connect(_on_quit_pressed)
 	
@@ -94,6 +96,10 @@ func spawn_enemies() -> void:
 
 func _on_play_pressed() -> void:
 	get_tree().change_scene_to_file("res://Map/TestMap/test_map.tscn")
+
+
+func _on_multiplayer_pressed() -> void:
+	get_tree().change_scene_to_file("res://UI/multiplayer_menu.tscn")
 
 
 func _on_settings_pressed() -> void:
