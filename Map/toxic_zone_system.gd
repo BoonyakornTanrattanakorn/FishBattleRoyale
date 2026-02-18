@@ -39,7 +39,17 @@ func _ready() -> void:
 	
 	# Wait a frame for the map to be fully loaded
 	await get_tree().process_frame
-	start_system()
+	
+	# In multiplayer, clients request existing toxic tiles from server
+	if NetworkManager.is_multiplayer():
+		if multiplayer.is_server():
+			start_system()
+		else:
+			# Client requests current toxic state from server
+			print("Client requesting toxic zone state from server...")
+			_request_toxic_state.rpc_id(1)
+	else:
+		start_system()
 
 
 func start_system() -> void:
@@ -95,7 +105,11 @@ func spawn_initial_border() -> void:
 	var selected_positions := border_positions.slice(0, spawn_count)
 	
 	for pos in selected_positions:
-		create_toxic_tile(pos)
+		create_toxic_tile_local(pos)
+	
+	# Sync all tiles to clients in one RPC
+	if NetworkManager.is_multiplayer() and multiplayer.is_server():
+		_sync_toxic_tiles_batch.rpc(selected_positions)
 	
 	current_wave = 1
 	zone_advanced.emit(current_wave)
@@ -152,7 +166,11 @@ func spread_to_adjacent() -> void:
 	
 	# Create new toxic tiles
 	for pos in new_toxic_positions:
-		create_toxic_tile(pos)
+		create_toxic_tile_local(pos)
+	
+	# Sync all new tiles to clients in one RPC
+	if NetworkManager.is_multiplayer() and multiplayer.is_server():
+		_sync_toxic_tiles_batch.rpc(new_toxic_positions)
 	
 	current_wave += 1
 	zone_advanced.emit(current_wave)
@@ -173,7 +191,7 @@ func advance_wave() -> void:
 	pass
 
 
-func create_toxic_tile(grid_pos: Vector2i) -> void:
+func create_toxic_tile_local(grid_pos: Vector2i) -> void:
 	if is_tile_toxic(grid_pos):
 		return
 	
@@ -195,45 +213,95 @@ func create_toxic_tile(grid_pos: Vector2i) -> void:
 	
 	add_child(tile)
 	toxic_tiles[grid_pos] = tile
-	
-	print("Created toxic tile at grid ", grid_pos, " world pos ", tile.position)
-	
-	# Sync to clients in multiplayer
-	if NetworkManager.is_multiplayer() and multiplayer.is_server():
-		_sync_toxic_tile.rpc(grid_pos)
 
 
-# RPC to sync toxic tile creation to clients
+# RPC to sync multiple toxic tiles at once (batched for efficiency)
 @rpc("authority", "call_remote", "reliable")
-func _sync_toxic_tile(grid_pos: Vector2i) -> void:
-	if is_tile_toxic(grid_pos):
+func _sync_toxic_tiles_batch(tile_positions: Array) -> void:
+	print("Client received ", tile_positions.size(), " toxic tiles to create")
+	
+	for grid_pos in tile_positions:
+		if is_tile_toxic(grid_pos):
+			continue
+		
+		# Create visual indicator on client
+		var tile := Polygon2D.new()
+		var tile_size := float(Config.tile_size)
+		
+		tile.polygon = PackedVector2Array([
+			Vector2(0, 0),
+			Vector2(tile_size, 0),
+			Vector2(tile_size, tile_size),
+			Vector2(0, tile_size)
+		])
+		
+		tile.position = Vector2(grid_pos) * Config.tile_size
+		tile.color = TOXIC_COLOR
+		tile.z_index = 10
+		
+		add_child(tile)
+		toxic_tiles[grid_pos] = tile
+
+
+# Client requests current toxic zone state (for late joiners)
+@rpc("any_peer", "call_remote", "reliable")
+func _request_toxic_state() -> void:
+	if not multiplayer.is_server():
 		return
 	
-	# Create visual indicator on client
-	var tile := Polygon2D.new()
-	var tile_size := float(Config.tile_size)
+	var peer_id = multiplayer.get_remote_sender_id()
+	print("Server sending toxic zone state to client ", peer_id, ": ", toxic_tiles.size(), " tiles")
 	
-	tile.polygon = PackedVector2Array([
-		Vector2(0, 0),
-		Vector2(tile_size, 0),
-		Vector2(tile_size, tile_size),
-		Vector2(0, tile_size)
-	])
+	# Send all existing toxic tiles to the requesting client
+	var tile_positions := []
+	for pos in toxic_tiles.keys():
+		tile_positions.append(pos)
 	
-	tile.position = Vector2(grid_pos) * Config.tile_size
-	tile.color = TOXIC_COLOR
-	tile.z_index = 10
+	if tile_positions.size() > 0:
+		_receive_toxic_state.rpc_id(peer_id, tile_positions, current_wave)
+	else:
+		# No toxic tiles yet, just start the system on client
+		_start_client_system.rpc_id(peer_id)
+
+
+# Client receives current toxic zone state
+@rpc("authority", "call_remote", "reliable")
+func _receive_toxic_state(tile_positions: Array, wave: int) -> void:
+	print("Client received toxic zone state: ", tile_positions.size(), " tiles, wave ", wave)
 	
-	add_child(tile)
-	toxic_tiles[grid_pos] = tile
+	current_wave = wave
+	game_started = true
 	
-	# Add pulsing animation - must be added after tile is in tree
-	var tween := tile.create_tween()
-	tween.set_loops(0)  # 0 means infinite loops in Godot 4
-	tween.set_ease(Tween.EASE_IN_OUT)
-	tween.set_trans(Tween.TRANS_SINE)
-	tween.tween_property(tile, "color:a", 0.5, 1.0)
-	tween.tween_property(tile, "color:a", 0.9, 1.0)
+	# Create all existing toxic tiles
+	for grid_pos in tile_positions:
+		if is_tile_toxic(grid_pos):
+			continue
+		
+		var tile := Polygon2D.new()
+		var tile_size := float(Config.tile_size)
+		
+		tile.polygon = PackedVector2Array([
+			Vector2(0, 0),
+			Vector2(tile_size, 0),
+			Vector2(tile_size, tile_size),
+			Vector2(0, tile_size)
+		])
+		
+		tile.position = Vector2(grid_pos) * Config.tile_size
+		tile.color = TOXIC_COLOR
+		tile.z_index = 10
+		
+		add_child(tile)
+		toxic_tiles[grid_pos] = tile
+	
+	print("Client toxic zone synchronized!")
+
+
+# Server tells client to start the system (no toxic tiles yet)
+@rpc("authority", "call_remote", "reliable")
+func _start_client_system() -> void:
+	game_started = true
+	print("Client toxic zone system started (no tiles yet)")
 
 
 func is_tile_toxic(grid_pos: Vector2i) -> bool:
