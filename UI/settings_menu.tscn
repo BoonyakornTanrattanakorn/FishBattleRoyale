@@ -28,106 +28,117 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -250.0
-offset_top = -250.0
+offset_top = -300.0
 offset_right = 250.0
-offset_bottom = 250.0
+offset_bottom = 300.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+[node name="MainVBox" type="VBoxContainer" parent="Panel"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 20
+theme_override_constants/separation = 10
 
-[node name="Title" type="Label" parent="Panel/VBoxContainer"]
+[node name="Title" type="Label" parent="Panel/MainVBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.2, 0.8, 1, 1)
 theme_override_font_sizes/font_size = 32
 text = "Settings"
 horizontal_alignment = 1
 
-[node name="Spacer1" type="Control" parent="Panel/VBoxContainer"]
-custom_minimum_size = Vector2(0, 20)
+[node name="ScrollContainer" type="ScrollContainer" parent="Panel/MainVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MainVBox/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 20
+
+[node name="Spacer1" type="Control" parent="Panel/MainVBox/ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 
-[node name="MapSizeContainer" type="VBoxContainer" parent="Panel/VBoxContainer"]
+[node name="MapSizeContainer" type="VBoxContainer" parent="Panel/MainVBox/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="MapSizeLabel" type="Label" parent="Panel/VBoxContainer/MapSizeContainer"]
+[node name="MapSizeLabel" type="Label" parent="Panel/MainVBox/ScrollContainer/VBoxContainer/MapSizeContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Map Size"
 horizontal_alignment = 1
 
-[node name="MapWidthContainer" type="HBoxContainer" parent="Panel/VBoxContainer/MapSizeContainer"]
+[node name="MapWidthContainer" type="HBoxContainer" parent="Panel/MainVBox/ScrollContainer/VBoxContainer/MapSizeContainer"]
 layout_mode = 2
 alignment = 1
 
-[node name="WidthLabel" type="Label" parent="Panel/VBoxContainer/MapSizeContainer/MapWidthContainer"]
+[node name="WidthLabel" type="Label" parent="Panel/MainVBox/ScrollContainer/VBoxContainer/MapSizeContainer/MapWidthContainer"]
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 text = "Width:"
 
-[node name="MapWidthInput" type="SpinBox" parent="Panel/VBoxContainer/MapSizeContainer"]
+[node name="MapWidthInput" type="SpinBox" parent="Panel/MainVBox/ScrollContainer/VBoxContainer/MapSizeContainer"]
 layout_mode = 2
 min_value = 10.0
 max_value = 40.0
 value = 20.0
 alignment = 1
 
-[node name="MapHeightContainer" type="HBoxContainer" parent="Panel/VBoxContainer/MapSizeContainer"]
+[node name="MapHeightContainer" type="HBoxContainer" parent="Panel/MainVBox/ScrollContainer/VBoxContainer/MapSizeContainer"]
 layout_mode = 2
 alignment = 1
 
-[node name="HeightLabel" type="Label" parent="Panel/VBoxContainer/MapSizeContainer/MapHeightContainer"]
+[node name="HeightLabel" type="Label" parent="Panel/MainVBox/ScrollContainer/VBoxContainer/MapSizeContainer/MapHeightContainer"]
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 text = "Height:"
 
-[node name="MapHeightInput" type="SpinBox" parent="Panel/VBoxContainer/MapSizeContainer"]
+[node name="MapHeightInput" type="SpinBox" parent="Panel/MainVBox/ScrollContainer/VBoxContainer/MapSizeContainer"]
 layout_mode = 2
 min_value = 10.0
 max_value = 40.0
 value = 20.0
 alignment = 1
 
-[node name="EnemyContainer" type="VBoxContainer" parent="Panel/VBoxContainer"]
+[node name="EnemyContainer" type="VBoxContainer" parent="Panel/MainVBox/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="EnemyLabel" type="Label" parent="Panel/VBoxContainer/EnemyContainer"]
+[node name="EnemyLabel" type="Label" parent="Panel/MainVBox/ScrollContainer/VBoxContainer/EnemyContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Enemy Count"
 horizontal_alignment = 1
 
-[node name="EnemyCountInput" type="SpinBox" parent="Panel/VBoxContainer/EnemyContainer"]
+[node name="EnemyCountInput" type="SpinBox" parent="Panel/MainVBox/ScrollContainer/VBoxContainer/EnemyContainer"]
 layout_mode = 2
 min_value = 1.0
 max_value = 20.0
 value = 5.0
 alignment = 1
 
-[node name="DifficultyContainer" type="VBoxContainer" parent="Panel/VBoxContainer"]
+[node name="DifficultyContainer" type="VBoxContainer" parent="Panel/MainVBox/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="DifficultyLabel" type="Label" parent="Panel/VBoxContainer/DifficultyContainer"]
+[node name="DifficultyLabel" type="Label" parent="Panel/MainVBox/ScrollContainer/VBoxContainer/DifficultyContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Difficulty"
 horizontal_alignment = 1
 
-[node name="DifficultyOption" type="OptionButton" parent="Panel/VBoxContainer/DifficultyContainer"]
+[node name="DifficultyOption" type="OptionButton" parent="Panel/MainVBox/ScrollContainer/VBoxContainer/DifficultyContainer"]
 layout_mode = 2
 alignment = 1
 
-[node name="DifficultyInfo" type="Label" parent="Panel/VBoxContainer/DifficultyContainer"]
+[node name="DifficultyInfo" type="Label" parent="Panel/MainVBox/ScrollContainer/VBoxContainer/DifficultyContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 text = "Easy: Player HP 5, Enemy HP 2, Drop 50%
@@ -136,12 +147,55 @@ Hard: Player HP 2, Enemy HP 4, Drop 15%"
 horizontal_alignment = 1
 autowrap_mode = 2
 
-[node name="Spacer2" type="Control" parent="Panel/VBoxContainer"]
+[node name="ToxicZoneContainer" type="VBoxContainer" parent="Panel/MainVBox/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="ToxicZoneLabel" type="Label" parent="Panel/MainVBox/ScrollContainer/VBoxContainer/ToxicZoneContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Toxic Zone Settings"
+horizontal_alignment = 1
+
+[node name="SpreadChanceLabel" type="Label" parent="Panel/MainVBox/ScrollContainer/VBoxContainer/ToxicZoneContainer"]
+layout_mode = 2
+text = "Spread Chance (0.0 - 1.0)"
+horizontal_alignment = 1
+
+[node name="SpreadChanceInput" type="SpinBox" parent="Panel/MainVBox/ScrollContainer/VBoxContainer/ToxicZoneContainer"]
+layout_mode = 2
+min_value = 0.0
+max_value = 1.0
+step = 0.05
+value = 0.5
+alignment = 1
+
+[node name="SpreadIntervalLabel" type="Label" parent="Panel/MainVBox/ScrollContainer/VBoxContainer/ToxicZoneContainer"]
+layout_mode = 2
+text = "Spread Interval (seconds)"
+horizontal_alignment = 1
+
+[node name="SpreadIntervalInput" type="SpinBox" parent="Panel/MainVBox/ScrollContainer/VBoxContainer/ToxicZoneContainer"]
+layout_mode = 2
+min_value = 0.5
+max_value = 10.0
+step = 0.5
+value = 2.0
+alignment = 1
+
+[node name="ToxicZoneInfo" type="Label" parent="Panel/MainVBox/ScrollContainer/VBoxContainer/ToxicZoneContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "Higher chance = faster spread
+Lower interval = spreads more often"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="Spacer2" type="Control" parent="Panel/MainVBox/ScrollContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
-size_flags_vertical = 3
 
-[node name="BackButton" type="Button" parent="Panel/VBoxContainer"]
+[node name="BackButton" type="Button" parent="Panel/MainVBox"]
 custom_minimum_size = Vector2(200, 50)
 layout_mode = 2
 size_flags_horizontal = 4
