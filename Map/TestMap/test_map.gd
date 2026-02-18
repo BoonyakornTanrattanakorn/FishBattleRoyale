@@ -31,6 +31,7 @@ func _ready() -> void:
 	
 	# Start tracking game stats
 	GameStats.start_game()
+	GameStats.set_multiplayer_session(NetworkManager.is_multiplayer())
 	
 	# Handle multiplayer seed synchronization
 	if NetworkManager.is_multiplayer():
@@ -225,6 +226,9 @@ func spawn_enemies() -> void:
 	for i in range(Config.enemy_count):
 		var enemy := enemy_scene.instantiate()
 		
+		# Set unique name for multiplayer synchronization
+		enemy.name = "Enemy_" + str(i)
+		
 		# Find a random valid spawn position (avoid player spawn areas)
 		var spawn_x: int
 		var spawn_y: int
@@ -259,10 +263,28 @@ func spawn_enemies() -> void:
 			if result.is_empty():
 				# Position is clear
 				enemy.position = spawn_pos
+				# Connect enemy death signal for multiplayer sync
+				if NetworkManager.is_multiplayer():
+					enemy.enemy_died.connect(_on_enemy_died)
 				add_child(enemy)
 				break
 			
 			attempts += 1
+
+
+# Handle enemy death synchronization in multiplayer
+func _on_enemy_died(enemy_name: String) -> void:
+	if NetworkManager.is_multiplayer():
+		# Notify all clients to remove this enemy
+		_remove_enemy.rpc(enemy_name)
+
+
+@rpc("any_peer", "call_local", "reliable")
+func _remove_enemy(enemy_name: String) -> void:
+	var enemy = get_node_or_null(enemy_name)
+	if enemy:
+		print("Removing enemy: ", enemy_name)
+		enemy.queue_free()
 
 
 func _process(delta: float) -> void:
@@ -309,9 +331,33 @@ func check_win_condition() -> void:
 	if not GameStats.game_active:
 		return
 	
-	# Check if all enemies are dead
+	# Check enemy count first
 	var enemies := get_tree().get_nodes_in_group("enemies")
-	if enemies.size() == 0:
-		# Player wins!
-		GameStats.stop_game()
-		get_tree().change_scene_to_file("res://UI/game_win.tscn")
+	var all_enemies_dead := enemies.size() == 0
+	
+	# In multiplayer, must be last player alive AND all enemies dead
+	if NetworkManager.is_multiplayer():
+		var players := get_tree().get_nodes_in_group("player")
+		var alive_players := 0
+		var winning_player: Player = null
+		
+		for player in players:
+			if player is Player and not player.is_dead:
+				alive_players += 1
+				winning_player = player
+		
+		# Win condition: Only 1 player alive AND all enemies dead
+		if alive_players == 1 and winning_player and all_enemies_dead:
+			# Only show win screen to the winning player
+			if winning_player.is_multiplayer_authority():
+				GameStats.stop_game()
+				get_tree().change_scene_to_file("res://UI/game_win.tscn")
+		# All players dead = no winner (shouldn't happen with spectator mode)
+		elif alive_players == 0:
+			print("All players dead - game over")
+	else:
+		# Single player: Check if all enemies are dead
+		if all_enemies_dead:
+			# Player wins!
+			GameStats.stop_game()
+			get_tree().change_scene_to_file("res://UI/game_win.tscn")

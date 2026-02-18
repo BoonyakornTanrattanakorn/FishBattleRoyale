@@ -1,6 +1,8 @@
 extends Character
 class_name Enemy
 
+signal enemy_died(enemy_name: String)
+
 const DIRECTIONS = [
 	Vector2.RIGHT,
 	Vector2.LEFT,
@@ -420,7 +422,13 @@ func die():
 		return
 	is_dead = true
 	GameStats.add_kill()
-	queue_free()
+	
+	# In multiplayer, emit signal for server to sync death
+	if NetworkManager.is_multiplayer():
+		enemy_died.emit(name)
+	else:
+		# Single player: just remove immediately
+		queue_free()
 
 
 func _on_area_entered(area: Area2D):

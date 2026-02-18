@@ -12,11 +12,18 @@ func _ready() -> void:
 	kills_label.text = str(GameStats.kills)
 	powerups_label.text = str(GameStats.powerups_collected)
 	
+	# Disable retry button in multiplayer
+	if GameStats.was_multiplayer:
+		retry_button.disabled = true
+		retry_button.text = "Cannot Replay (Multiplayer)"
+	
 	# Connect buttons
 	main_menu_button.pressed.connect(_on_main_menu_pressed)
 	retry_button.pressed.connect(_on_retry_pressed)
 
 func _on_main_menu_pressed() -> void:
+	# Reset session state when returning to menu
+	GameStats.reset_session_state()
 	get_tree().change_scene_to_file("res://UI/main_menu.tscn")
 
 func _on_retry_pressed() -> void:

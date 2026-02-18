@@ -117,12 +117,14 @@ func _on_play_pressed() -> void:
 	# Store name for single player
 	NetworkManager.players_data[1] = {"name": player_name}
 	
-	# Reset death state when starting fresh from main menu
-	GameStats.reset_death_state()
+	# Reset session state when starting fresh from main menu
+	GameStats.reset_session_state()
 	get_tree().change_scene_to_file("res://Map/TestMap/test_map.tscn")
 
 
 func _on_multiplayer_pressed() -> void:
+	# Reset session state when entering multiplayer
+	GameStats.reset_session_state()
 	# Clear current name reservation for multiplayer
 	FishNames.clear_all_names()
 	get_tree().change_scene_to_file("res://UI/multiplayer_lobby.tscn")

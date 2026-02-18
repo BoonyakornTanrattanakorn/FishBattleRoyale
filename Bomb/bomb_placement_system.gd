@@ -16,12 +16,26 @@ func _ready() -> void:
 func place_bomb():
 	if bomb_placed >= character.max_bombs:
 		return
-		
-	var bomb = BOMB_SCENE.instantiate()
-	var character_position = character.position
-	var bomb_position = character_position
 	
-	bomb.explosion_size = explosion_size
+	var bomb_position = character.position
+	
+	# In multiplayer, use RPC to sync bomb placement across all clients
+	if NetworkManager.is_multiplayer():
+		_spawn_bomb_rpc.rpc(bomb_position, explosion_size)
+	else:
+		_spawn_bomb_local(bomb_position, explosion_size)
+
+
+# RPC method to spawn bomb on all clients
+@rpc("any_peer", "call_local", "reliable")
+func _spawn_bomb_rpc(bomb_position: Vector2, bomb_explosion_size: int):
+	_spawn_bomb_local(bomb_position, bomb_explosion_size)
+
+
+# Local bomb spawning logic
+func _spawn_bomb_local(bomb_position: Vector2, bomb_explosion_size: int):
+	var bomb = BOMB_SCENE.instantiate()
+	bomb.explosion_size = bomb_explosion_size
 	bomb.position = bomb_position
 	get_tree().root.add_child(bomb)
 	bomb_placed += 1

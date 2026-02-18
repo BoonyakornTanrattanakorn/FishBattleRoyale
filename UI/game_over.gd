@@ -22,6 +22,8 @@ func _ready() -> void:
 	retry_button.pressed.connect(_on_retry_pressed)
 
 func _on_main_menu_pressed() -> void:
+	# Reset session state when returning to menu
+	GameStats.reset_session_state()
 	get_tree().change_scene_to_file("res://UI/main_menu.tscn")
 
 func _on_retry_pressed() -> void:

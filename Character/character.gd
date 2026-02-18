@@ -30,6 +30,18 @@ func move(dir: Vector2) -> void:
 
 	if ray.is_colliding():
 		return
+	
+	# Check if there's another character at the target position
+	var target_pos = position + dir * Config.tile_size
+	var overlapping_characters := get_tree().get_nodes_in_group("player")
+	overlapping_characters.append_array(get_tree().get_nodes_in_group("enemies"))
+	
+	for character in overlapping_characters:
+		if character is Character and character != self:
+			# Check if the character is at the target position (within tile boundaries)
+			var distance = character.position.distance_to(target_pos)
+			if distance < Config.tile_size * 0.5:  # Within half a tile
+				return  # Blocked by another character
 
 	# Cancel invincibility when moving
 	invincible = false

@@ -127,7 +127,7 @@ func _on_peer_connected(id: int) -> void:
 		# Server: wait for player to send their name
 		# Sync all current players to the new peer
 		_sync_players.rpc_id(id, players)
-	update_players_list()
+	# Don't update list here - wait for name registration
 
 
 func _on_peer_disconnected(id: int) -> void:
@@ -207,6 +207,9 @@ func _register_player_name(peer_id: int, player_name: String) -> void:
 		players[peer_id] = final_name
 		NetworkManager.players_data[peer_id] = {"name": final_name}
 		
+		# Update server's own player list
+		update_players_list()
+		
 		# Notify all clients about the new player
 		_add_player.rpc(peer_id, final_name)
 		
@@ -257,8 +260,8 @@ func _on_start_pressed() -> void:
 
 @rpc("authority", "call_local", "reliable")
 func _start_game() -> void:
-	# Reset death state when starting multiplayer game
-	GameStats.reset_death_state()
+	# Reset session state when starting multiplayer game
+	GameStats.reset_session_state()
 	get_tree().change_scene_to_file("res://Map/TestMap/test_map.tscn")
 
 

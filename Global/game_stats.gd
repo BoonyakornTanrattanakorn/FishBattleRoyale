@@ -6,6 +6,7 @@ var kills := 0
 var time_survived := 0.0
 var game_active := false
 var player_died := false  # Track if player died in current session
+var was_multiplayer := false  # Track if current session was multiplayer
 
 var timer: Timer
 
@@ -27,6 +28,15 @@ func start_game() -> void:
 func reset_death_state() -> void:
 	# Reset death state when starting fresh from menu
 	player_died = false
+
+func set_multiplayer_session(is_multiplayer: bool) -> void:
+	# Track if this is a multiplayer session
+	was_multiplayer = is_multiplayer
+
+func reset_session_state() -> void:
+	# Reset all session flags when returning to main menu
+	player_died = false
+	was_multiplayer = false
 
 func stop_game() -> void:
 	game_active = false

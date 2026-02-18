@@ -138,20 +138,54 @@ func die():
 	is_dead = true
 	print("player died")
 	
-	# In multiplayer, only the local player sees game over
+	# In multiplayer, enable spectator mode instead of game over
 	if NetworkManager.is_multiplayer():
 		if is_multiplayer_authority():
 			GameStats.mark_player_death()
 			GameStats.stop_game()
-			get_tree().change_scene_to_file("res://UI/game_over.tscn")
+			# Enter spectator mode
+			_enter_spectator_mode()
 		else:
-			# Other player died, just hide them
-			queue_free()
+			# Other player died - hide them completely from alive players
+			visible = false
+			# Disable collision completely
+			var collision_shape = get_node_or_null("CollisionShape2D")
+			if collision_shape:
+				collision_shape.set_deferred("disabled", true)
 	else:
-		# Single player
+		# Single player - show game over screen
 		GameStats.mark_player_death()
 		GameStats.stop_game()
 		get_tree().change_scene_to_file("res://UI/game_over.tscn")
+
+
+func _enter_spectator_mode():
+	# Make player transparent
+	animated_sprite_2d.modulate.a = 0.3
+	name_label.text = player_name + " (Spectating)"
+	name_label.modulate = Color.GRAY
+	
+	# Completely disable collision
+	collision_layer = 0
+	collision_mask = 0
+	var collision_shape = get_node_or_null("CollisionShape2D")
+	if collision_shape:
+		collision_shape.set_deferred("disabled", true)
+	
+	# Disable Area2D monitoring
+	monitoring = false
+	monitorable = false
+	
+	# Disable raycast
+	if ray:
+		ray.enabled = false
+	
+	# Show spectator UI
+	var spectator_ui = load("res://UI/spectator_ui.tscn").instantiate()
+	get_tree().root.add_child(spectator_ui)
+	
+	# Camera and UI stay active so player can watch
+	print("Entered spectator mode. Camera remains active.")
 
 
 func _on_area_entered(area: Area2D):
