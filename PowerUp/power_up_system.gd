@@ -34,6 +34,13 @@ func enable_power_up(power_up_type: Utils.PowerUpType):
 			speed_ups += 1
 			print("speed_up_start")
 			speed_up_timer.start()
+		Utils.PowerUpType.HP:
+			# Heal character by 1 HP (up to max_hp)
+			character.set_hp(character.get_hp() + 1)
+			# Update health UI for player
+			if character is Player:
+				character.healthChanged.emit(character.get_hp())
+			print("hp_restored")
 	
 	# Emit signal to update UI
 	powerups_changed.emit(bomb_ups, fire_ups, speed_ups)
