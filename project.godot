@@ -24,6 +24,8 @@ config/icon="res://icon.svg"
 Utils="*uid://csnmcpm0vyjg1"
 Config="*uid://dw0yqdoabj7md"
 GameStats="*res://Global/game_stats.gd"
+NetworkManager="*res://Global/network_manager.gd"
+FishNames="*res://Global/fish_names.gd"
 
 [display]
 

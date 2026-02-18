@@ -1,0 +1,200 @@
+[gd_scene format=3 uid="uid://b6m2uckkusyhh"]
+
+[ext_resource type="Script" path="res://UI/multiplayer_lobby.gd" id="1_lobby"]
+
+[node name="MultiplayerLobby" type="Control" unique_id=1309539878]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_lobby")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=743690238]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.1, 0.15, 0.25, 1)
+
+[node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=2908566]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+follow_focus = true
+
+[node name="MainContainer" type="VBoxContainer" parent="ScrollContainer" unique_id=760574657]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 20
+
+[node name="Title" type="Label" parent="ScrollContainer/MainContainer" unique_id=93108967]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.8, 1, 1)
+theme_override_font_sizes/font_size = 40
+text = "Multiplayer Lobby"
+horizontal_alignment = 1
+
+[node name="Spacer1" type="Control" parent="ScrollContainer/MainContainer" unique_id=130994163]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="PlayerNameContainer" type="VBoxContainer" parent="ScrollContainer/MainContainer" unique_id=964457393]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="NameLabel" type="Label" parent="ScrollContainer/MainContainer/PlayerNameContainer" unique_id=1033263169]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.9, 0.9, 1)
+theme_override_font_sizes/font_size = 18
+text = "Your Name:"
+horizontal_alignment = 1
+
+[node name="NameInput" type="LineEdit" parent="ScrollContainer/MainContainer/PlayerNameContainer" unique_id=1135493893]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+placeholder_text = "Enter your name (or leave blank for random)"
+alignment = 1
+max_length = 20
+
+[node name="RandomNameButton" type="Button" parent="ScrollContainer/MainContainer/PlayerNameContainer" unique_id=1484167694]
+custom_minimum_size = Vector2(0, 35)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "🎲 Random Fish Name"
+
+[node name="Spacer1b" type="Control" parent="ScrollContainer/MainContainer" unique_id=488515463]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
+[node name="HostContainer" type="VBoxContainer" parent="ScrollContainer/MainContainer" unique_id=568704864]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="HostButton" type="Button" parent="ScrollContainer/MainContainer/HostContainer" unique_id=1389193612]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(0.2, 1, 0.4, 1)
+theme_override_font_sizes/font_size = 28
+text = "Host Game"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ScrollContainer/MainContainer/HostContainer" unique_id=1690582839]
+layout_mode = 2
+alignment = 1
+
+[node name="PortLabel" type="Label" parent="ScrollContainer/MainContainer/HostContainer/HBoxContainer" unique_id=1781824664]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Port:"
+
+[node name="PortInput" type="LineEdit" parent="ScrollContainer/MainContainer/HostContainer/HBoxContainer" unique_id=982123390]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "7777"
+placeholder_text = "Enter port"
+alignment = 1
+
+[node name="Spacer2" type="Control" parent="ScrollContainer/MainContainer" unique_id=847634376]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="JoinContainer" type="VBoxContainer" parent="ScrollContainer/MainContainer" unique_id=790484819]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="JoinButton" type="Button" parent="ScrollContainer/MainContainer/JoinContainer" unique_id=1962315462]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(0.4, 0.6, 1, 1)
+theme_override_font_sizes/font_size = 28
+text = "Join Game"
+
+[node name="AddressContainer" type="HBoxContainer" parent="ScrollContainer/MainContainer/JoinContainer" unique_id=182893742]
+layout_mode = 2
+alignment = 1
+
+[node name="AddressLabel" type="Label" parent="ScrollContainer/MainContainer/JoinContainer/AddressContainer" unique_id=2041241909]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "IP:"
+
+[node name="AddressInput" type="LineEdit" parent="ScrollContainer/MainContainer/JoinContainer/AddressContainer" unique_id=615447483]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "127.0.0.1"
+placeholder_text = "Enter IP address"
+alignment = 1
+
+[node name="PortContainer" type="HBoxContainer" parent="ScrollContainer/MainContainer/JoinContainer" unique_id=753610576]
+layout_mode = 2
+alignment = 1
+
+[node name="PortLabel" type="Label" parent="ScrollContainer/MainContainer/JoinContainer/PortContainer" unique_id=1790953200]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Port:"
+
+[node name="PortInput" type="LineEdit" parent="ScrollContainer/MainContainer/JoinContainer/PortContainer" unique_id=215667773]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "7777"
+placeholder_text = "Enter port"
+alignment = 1
+
+[node name="Spacer3" type="Control" parent="ScrollContainer/MainContainer" unique_id=2112335927]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="StatusLabel" type="Label" parent="ScrollContainer/MainContainer" unique_id=310362521]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0.4, 1)
+theme_override_font_sizes/font_size = 18
+text = "Status: Waiting..."
+horizontal_alignment = 1
+
+[node name="PlayersList" type="RichTextLabel" parent="ScrollContainer/MainContainer" unique_id=1686607447]
+custom_minimum_size = Vector2(0, 150)
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 18
+bbcode_enabled = true
+text = "[center]Players: 0[/center]"
+fit_content = true
+
+[node name="Spacer4" type="Control" parent="ScrollContainer/MainContainer" unique_id=757997927]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
+[node name="StartButton" type="Button" parent="ScrollContainer/MainContainer" unique_id=1653381141]
+visible = false
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 0.8, 0.2, 1)
+theme_override_font_sizes/font_size = 28
+text = "Start Game"
+
+[node name="BackButton" type="Button" parent="ScrollContainer/MainContainer" unique_id=595298550]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 0.4, 0.4, 1)
+theme_override_font_sizes/font_size = 20
+text = "Back to Menu"

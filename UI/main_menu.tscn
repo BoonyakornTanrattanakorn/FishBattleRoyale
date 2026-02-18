@@ -53,6 +53,35 @@ vertical_alignment = 1
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 
+[node name="PlayerNameContainer" type="VBoxContainer" parent="CanvasLayer/MenuContainer"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="NameLabel" type="Label" parent="CanvasLayer/MenuContainer/PlayerNameContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.9, 0.9, 1)
+theme_override_font_sizes/font_size = 16
+text = "Your Name:"
+horizontal_alignment = 1
+
+[node name="NameInput" type="LineEdit" parent="CanvasLayer/MenuContainer/PlayerNameContainer"]
+custom_minimum_size = Vector2(0, 35)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+placeholder_text = "Enter name (or leave blank for random)"
+alignment = 1
+max_length = 20
+
+[node name="RandomNameButton" type="Button" parent="CanvasLayer/MenuContainer/PlayerNameContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "🎲 Random Fish Name"
+
+[node name="Spacer2" type="Control" parent="CanvasLayer/MenuContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
 [node name="PlayButton" type="Button" parent="CanvasLayer/MenuContainer" unique_id=880525642]
 custom_minimum_size = Vector2(200, 50)
 layout_mode = 2
@@ -61,6 +90,15 @@ theme_override_colors/font_pressed_color = Color(0.8, 0.9, 1, 1)
 theme_override_colors/font_hover_color = Color(0.2, 0.8, 1, 1)
 theme_override_font_sizes/font_size = 24
 text = "Play"
+
+[node name="MultiplayerButton" type="Button" parent="CanvasLayer/MenuContainer" unique_id=1923847123]
+custom_minimum_size = Vector2(200, 50)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(0.9, 0.7, 1, 1)
+theme_override_colors/font_hover_color = Color(0.6, 0.4, 1, 1)
+theme_override_font_sizes/font_size = 24
+text = "Multiplayer"
 
 [node name="SettingsButton" type="Button" parent="CanvasLayer/MenuContainer" unique_id=2120052490]
 custom_minimum_size = Vector2(200, 50)

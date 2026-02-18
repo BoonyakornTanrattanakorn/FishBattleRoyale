@@ -6,9 +6,14 @@ signal healthChanged
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 @onready var bomb_placement_system: BombPlacementSystem = $BombPlacementSystem
 @onready var power_up_system: Node = $PowerUpSystem
+@onready var name_label: Label = $NameLabel
 
 @onready var heart_container: HBoxContainer = $CanvasLayer/heartContainer
 @onready var powerup_display: HBoxContainer = $CanvasLayer/PowerupDisplay
+@onready var camera: Camera2D = $Camera2D
+
+var peer_id: int = 1  # Default to server/single player
+var player_name: String = "Player"
 
 func _ready() -> void:
 	super()
@@ -20,7 +25,59 @@ func _ready() -> void:
 	healthChanged.connect(heart_container.updateHearts)
 	power_up_system.powerups_changed.connect(powerup_display.update_display)
 	
+	# Set player name and color from NetworkManager
+	if NetworkManager.is_multiplayer():
+		player_name = NetworkManager.get_player_name(peer_id)
+		
+		# Different colors for different players
+		if peer_id == 1:
+			name_label.modulate = Color.YELLOW
+		else:
+			var colors := [Color.CYAN, Color.GREEN, Color.MAGENTA, Color.ORANGE]
+			name_label.modulate = colors[(peer_id - 2) % colors.size()]
+	else:
+		# Single player mode - get name from NetworkManager if available
+		player_name = NetworkManager.get_player_name(peer_id)
+		if player_name == "Player 1":
+			# Fallback if no name was set
+			player_name = "Player"
+		name_label.modulate = Color.WHITE
+	
+	name_label.text = player_name
+	print("Player %d name set to: %s" % [peer_id, player_name])
+	
+	# Set up multiplayer authority
+	if NetworkManager.is_multiplayer():
+		# Authority should already be set by spawn function, but set it again to be safe
+		if get_multiplayer_authority() != peer_id:
+			set_multiplayer_authority(peer_id)
+		
+		print("Player %d authority set. Is authority: %s" % [peer_id, is_multiplayer_authority()])
+		print("My unique ID: %d, Peer ID: %d" % [multiplayer.get_unique_id(), peer_id])
+		
+		# Only enable camera and UI for local player
+		if is_multiplayer_authority():
+			camera.enabled = true
+			heart_container.visible = true
+			powerup_display.visible = true
+			print("Player %d: Enabled camera and HUD (LOCAL PLAYER)" % peer_id)
+		else:
+			camera.enabled = false
+			heart_container.visible = false
+			powerup_display.visible = false
+			print("Player %d: Remote player - disabled camera and HUD" % peer_id)
+		
+		NetworkManager.register_player(peer_id, self)
+	else:
+		# Single player mode
+		camera.enabled = true
+		print("Single player mode - camera enabled")
+	
 func _input(_event):
+	# Only process input for local player in multiplayer
+	if NetworkManager.is_multiplayer() and not is_multiplayer_authority():
+		return
+	
 	if moving:
 		return
 
@@ -80,8 +137,21 @@ func die():
 		return
 	is_dead = true
 	print("player died")
-	GameStats.stop_game()
-	get_tree().change_scene_to_file("res://UI/game_over.tscn")
+	
+	# In multiplayer, only the local player sees game over
+	if NetworkManager.is_multiplayer():
+		if is_multiplayer_authority():
+			GameStats.mark_player_death()
+			GameStats.stop_game()
+			get_tree().change_scene_to_file("res://UI/game_over.tscn")
+		else:
+			# Other player died, just hide them
+			queue_free()
+	else:
+		# Single player
+		GameStats.mark_player_death()
+		GameStats.stop_game()
+		get_tree().change_scene_to_file("res://UI/game_over.tscn")
 
 
 func _on_area_entered(area: Area2D):

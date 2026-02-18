@@ -3,7 +3,7 @@ extends Node
 var tile_size = 64
 
 # Game settings
-var map_size := Vector2i(30, 30)
+var map_size := Vector2i(10, 10)
 var enemy_count := 0.02 * map_size.x * map_size.y
 var difficulty := "Easy"  # Easy, Normal, Hard
 

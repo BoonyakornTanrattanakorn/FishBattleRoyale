@@ -5,6 +5,7 @@ var powerups_collected := 0
 var kills := 0
 var time_survived := 0.0
 var game_active := false
+var player_died := false  # Track if player died in current session
 
 var timer: Timer
 
@@ -23,9 +24,16 @@ func start_game() -> void:
 	game_active = true
 	timer.start()
 
+func reset_death_state() -> void:
+	# Reset death state when starting fresh from menu
+	player_died = false
+
 func stop_game() -> void:
 	game_active = false
 	timer.stop()
+
+func mark_player_death() -> void:
+	player_died = true
 
 func _on_timer_timeout() -> void:
 	if game_active:

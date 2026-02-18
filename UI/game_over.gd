@@ -12,6 +12,11 @@ func _ready() -> void:
 	kills_label.text = str(GameStats.kills)
 	powerups_label.text = str(GameStats.powerups_collected)
 	
+	# Disable retry button if player died
+	if GameStats.player_died:
+		retry_button.disabled = true
+		retry_button.text = "Cannot Rejoin (Dead)"
+	
 	# Connect buttons
 	main_menu_button.pressed.connect(_on_main_menu_pressed)
 	retry_button.pressed.connect(_on_retry_pressed)

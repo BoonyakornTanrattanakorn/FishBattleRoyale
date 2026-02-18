@@ -25,6 +25,20 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vgqql"]
 size = Vector2(64, 64)
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_sync"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 2
+properties/1/path = NodePath("AnimatedSprite2D:flip_h")
+properties/1/spawn = true
+properties/1/replication_mode = 2
+properties/2/path = NodePath("NameLabel:text")
+properties/2/spawn = true
+properties/2/replication_mode = 2
+properties/3/path = NodePath("NameLabel:modulate")
+properties/3/spawn = true
+properties/3/replication_mode = 2
+
 [node name="Player" type="Area2D" unique_id=1910785464 groups=["players"]]
 collision_mask = 64
 script = ExtResource("1_cvnsp")
@@ -48,6 +62,22 @@ sprite_frames = SubResource("SpriteFrames_6t5aa")
 animation = &"Idle"
 frame_progress = 0.27862462
 
+[node name="NameLabel" type="Label" parent="."]
+offset_left = -40.0
+offset_top = -50.0
+offset_right = 40.0
+offset_bottom = -30.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 14
+text = "Player"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="RayCast2D" type="RayCast2D" parent="." unique_id=1099746239]
 target_position = Vector2(0, 64)
 collision_mask = 15
@@ -67,6 +97,9 @@ wait_time = 10.0
 one_shot = true
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=684116910]
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_sync")
 
 [connection signal="area_entered" from="." to="." method="_on_area_entered"]
 [connection signal="powerups_changed" from="PowerUpSystem" to="CanvasLayer/PowerupDisplay" method="update_display"]

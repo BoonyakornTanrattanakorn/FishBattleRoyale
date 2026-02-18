@@ -2,9 +2,13 @@ extends Node2D
 
 @onready var background_texture: TextureRect = $Background/BackgroundTexture
 @onready var play_button: Button = $CanvasLayer/MenuContainer/PlayButton
+@onready var multiplayer_button: Button = $CanvasLayer/MenuContainer/MultiplayerButton
 @onready var settings_button: Button = $CanvasLayer/MenuContainer/SettingsButton
 @onready var quit_button: Button = $CanvasLayer/MenuContainer/QuitButton
 @onready var camera: Camera2D = $Camera2D
+
+@onready var name_input: LineEdit = $CanvasLayer/MenuContainer/PlayerNameContainer/NameInput
+@onready var random_name_button: Button = $CanvasLayer/MenuContainer/PlayerNameContainer/RandomNameButton
 
 var enemy_scene := preload("res://Character/Enemy/enemy.tscn")
 var wall_tile := preload("res://Block/Indestructible/Wall/wall.tscn")
@@ -19,6 +23,9 @@ var camera_wait_time := 2.0
 
 func _ready() -> void:
 	randomize()
+	
+	# Clear all reserved names from previous session
+	FishNames.clear_all_names()
 	
 	# Generate background
 	background_texture.visible = false
@@ -48,10 +55,15 @@ func _ready() -> void:
 	# Spawn enemies
 	spawn_enemies()
 	
+	# Generate initial random name for player
+	name_input.text = FishNames.generate_random_name()
+	
 	# Connect buttons
 	play_button.pressed.connect(_on_play_pressed)
+	multiplayer_button.pressed.connect(_on_multiplayer_pressed)
 	settings_button.pressed.connect(_on_settings_pressed)
 	quit_button.pressed.connect(_on_quit_pressed)
+	random_name_button.pressed.connect(_on_random_name_pressed)
 	
 	# Start camera movement
 	start_camera_movement()
@@ -92,8 +104,28 @@ func spawn_enemies() -> void:
 			attempts += 1
 
 
+func _on_random_name_pressed() -> void:
+	name_input.text = FishNames.generate_random_name()
+
+
 func _on_play_pressed() -> void:
+	# Get player name
+	var player_name := name_input.text.strip_edges()
+	if player_name.is_empty():
+		player_name = FishNames.generate_random_name()
+	
+	# Store name for single player
+	NetworkManager.players_data[1] = {"name": player_name}
+	
+	# Reset death state when starting fresh from main menu
+	GameStats.reset_death_state()
 	get_tree().change_scene_to_file("res://Map/TestMap/test_map.tscn")
+
+
+func _on_multiplayer_pressed() -> void:
+	# Clear current name reservation for multiplayer
+	FishNames.clear_all_names()
+	get_tree().change_scene_to_file("res://UI/multiplayer_lobby.tscn")
 
 
 func _on_settings_pressed() -> void:
