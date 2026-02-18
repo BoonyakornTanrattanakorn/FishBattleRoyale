@@ -52,6 +52,10 @@ func _process(delta: float) -> void:
 	if not enabled or not game_started:
 		return
 	
+	# Only server runs toxic zone logic in multiplayer
+	if NetworkManager.is_multiplayer() and not multiplayer.is_server():
+		return
+	
 	# Initial spawn or spreading timer
 	if not spreading_active:
 		spread_timer -= delta
@@ -193,6 +197,35 @@ func create_toxic_tile(grid_pos: Vector2i) -> void:
 	toxic_tiles[grid_pos] = tile
 	
 	print("Created toxic tile at grid ", grid_pos, " world pos ", tile.position)
+	
+	# Sync to clients in multiplayer
+	if NetworkManager.is_multiplayer() and multiplayer.is_server():
+		_sync_toxic_tile.rpc(grid_pos)
+
+
+# RPC to sync toxic tile creation to clients
+@rpc("authority", "call_remote", "reliable")
+func _sync_toxic_tile(grid_pos: Vector2i) -> void:
+	if is_tile_toxic(grid_pos):
+		return
+	
+	# Create visual indicator on client
+	var tile := Polygon2D.new()
+	var tile_size := float(Config.tile_size)
+	
+	tile.polygon = PackedVector2Array([
+		Vector2(0, 0),
+		Vector2(tile_size, 0),
+		Vector2(tile_size, tile_size),
+		Vector2(0, tile_size)
+	])
+	
+	tile.position = Vector2(grid_pos) * Config.tile_size
+	tile.color = TOXIC_COLOR
+	tile.z_index = 10
+	
+	add_child(tile)
+	toxic_tiles[grid_pos] = tile
 	
 	# Add pulsing animation - must be added after tile is in tree
 	var tween := tile.create_tween()

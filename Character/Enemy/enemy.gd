@@ -38,7 +38,9 @@ func _ready() -> void:
 			think_time = 0.5
 			bomb_avoidance_distance = 4.0
 	
-	ai_loop()
+	# Only run AI on server in multiplayer
+	if not NetworkManager.is_multiplayer() or multiplayer.is_server():
+		ai_loop()
 
 
 func ai_loop():
@@ -421,13 +423,16 @@ func die():
 	if is_dead:
 		return
 	is_dead = true
-	GameStats.add_kill()
 	
-	# In multiplayer, emit signal for server to sync death
+	# Only server handles kill stats and removal in multiplayer
 	if NetworkManager.is_multiplayer():
-		enemy_died.emit(name)
+		if multiplayer.is_server():
+			GameStats.add_kill()
+			enemy_died.emit(name)
+		# Clients wait for server RPC to remove enemy
 	else:
 		# Single player: just remove immediately
+		GameStats.add_kill()
 		queue_free()
 
 

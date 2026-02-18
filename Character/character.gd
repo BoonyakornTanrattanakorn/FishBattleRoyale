@@ -45,6 +45,10 @@ func move(dir: Vector2) -> void:
 
 	# Cancel invincibility when moving
 	invincible = false
+	
+	# In multiplayer, sync enemy movement from server to clients
+	if self is Enemy and NetworkManager.is_multiplayer() and multiplayer.is_server():
+		_sync_enemy_move.rpc(dir)
 
 	var tween := create_tween()
 	tween.tween_property(
@@ -59,6 +63,26 @@ func move(dir: Vector2) -> void:
 	moving = false
 
 
+# RPC to sync enemy movement to clients
+@rpc("authority", "call_remote", "reliable")
+func _sync_enemy_move(dir: Vector2) -> void:
+	# Client receives move command and executes it
+	if moving:
+		return
+	
+	var tween := create_tween()
+	tween.tween_property(
+		self,
+		"position",
+		position + dir * Config.tile_size,
+		1.0 / animation_speed
+	)
+	
+	moving = true
+	await tween.finished
+	moving = false
+
+
 # ---------------- HP SYSTEM ----------------
 
 func reduce_hp():
@@ -66,11 +90,22 @@ func reduce_hp():
 		return
 
 	set_hp(hp - 1)
+	
+	# Sync HP to clients in multiplayer
+	if NetworkManager.is_multiplayer() and multiplayer.is_server():
+		_sync_hp.rpc(hp)
 
 	if hp <= 0:
 		die()
 	else:
 		start_invincible()
+
+
+# RPC to sync HP from server to clients
+@rpc("authority", "call_remote", "reliable")
+func _sync_hp(new_hp: int):
+	hp = new_hp
+	# Trigger any visual updates (override in subclasses if needed)
 
 
 func start_invincible():

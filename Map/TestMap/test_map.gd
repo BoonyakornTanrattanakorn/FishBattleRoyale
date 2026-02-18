@@ -113,7 +113,8 @@ func generate_map() -> void:
 		return
 	
 	map_generated = true
-	print("Generating map with seed: ", map_seed if map_seed != 0 else "random")
+	var seed_str = str(map_seed) if map_seed != 0 else "random"
+	print("Generating map with seed: ", seed_str)
 
 	background_texture.visible = false
 

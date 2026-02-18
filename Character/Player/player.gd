@@ -114,8 +114,20 @@ func move(dir):
 func reduce_hp():
 	set_hp(get_hp()-1)
 	healthChanged.emit(hp)
+	
+	# Sync HP to clients in multiplayer
+	if NetworkManager.is_multiplayer() and multiplayer.is_server():
+		_sync_player_hp.rpc(hp)
+	
 	if get_hp() <= 0:
 		die()
+
+
+# Override the base class HP sync for players to update UI
+@rpc("authority", "call_remote", "reliable")
+func _sync_player_hp(new_hp: int):
+	hp = new_hp
+	healthChanged.emit(hp)
 
 # Override invincible for blinking
 func start_invincible():
@@ -202,6 +214,28 @@ func _enter_spectator_mode():
 
 func _on_area_entered(area: Area2D):
 	if area is PowerUp:
-		GameStats.add_powerup()
-		power_up_system.enable_power_up(area.type)
-		area.queue_free()
+		# Only server handles power-up collection in multiplayer
+		if NetworkManager.is_multiplayer():
+			if multiplayer.is_server():
+				# Server processes collection
+				GameStats.add_powerup()
+				power_up_system.enable_power_up(area.type)
+				# Sync to all clients
+				_sync_powerup_collection.rpc(area.type, area.get_path())
+				area.queue_free()
+			# Clients do nothing - they'll receive sync from server
+		else:
+			# Single player
+			GameStats.add_powerup()
+			power_up_system.enable_power_up(area.type)
+			area.queue_free()
+
+
+# RPC to sync power-up collection from server to clients
+@rpc("authority", "call_remote", "reliable")
+func _sync_powerup_collection(powerup_type: int, powerup_path: NodePath):
+	power_up_system.enable_power_up(powerup_type)
+	# Remove the power-up on client
+	var powerup = get_node_or_null(powerup_path)
+	if powerup:
+		powerup.queue_free()
