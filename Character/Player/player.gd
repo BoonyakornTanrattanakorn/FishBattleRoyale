@@ -138,25 +138,37 @@ func die():
 	is_dead = true
 	print("player died")
 	
-	# In multiplayer, enable spectator mode instead of game over
+	# In multiplayer, sync death state and enable spectator mode
 	if NetworkManager.is_multiplayer():
+		# Notify all clients about death (including self)
+		_sync_death.rpc()
+		
 		if is_multiplayer_authority():
 			GameStats.mark_player_death()
 			GameStats.stop_game()
 			# Enter spectator mode
 			_enter_spectator_mode()
-		else:
-			# Other player died - hide them completely from alive players
-			visible = false
-			# Disable collision completely
-			var collision_shape = get_node_or_null("CollisionShape2D")
-			if collision_shape:
-				collision_shape.set_deferred("disabled", true)
 	else:
 		# Single player - show game over screen
 		GameStats.mark_player_death()
 		GameStats.stop_game()
 		get_tree().change_scene_to_file("res://UI/game_over.tscn")
+
+
+@rpc("any_peer", "call_local", "reliable")
+func _sync_death() -> void:
+	# Sync death state across all clients
+	if not is_dead:
+		is_dead = true
+		print("Synced death for player: ", player_name)
+		
+	# For remote players (not the one who died), hide them
+	if not is_multiplayer_authority():
+		visible = false
+		# Disable collision completely
+		var collision_shape = get_node_or_null("CollisionShape2D")
+		if collision_shape:
+			collision_shape.set_deferred("disabled", true)
 
 
 func _enter_spectator_mode():

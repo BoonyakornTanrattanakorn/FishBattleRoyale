@@ -288,6 +288,10 @@ func _remove_enemy(enemy_name: String) -> void:
 
 
 func _process(delta: float) -> void:
+	# Only server checks win condition to prevent desync
+	if NetworkManager.is_multiplayer() and not multiplayer.is_server():
+		return
+	
 	# Check for win condition periodically
 	check_timer += delta
 	if check_timer >= check_interval:
@@ -348,10 +352,9 @@ func check_win_condition() -> void:
 		
 		# Win condition: Only 1 player alive AND all enemies dead
 		if alive_players == 1 and winning_player and all_enemies_dead:
-			# Only show win screen to the winning player
-			if winning_player.is_multiplayer_authority():
-				GameStats.stop_game()
-				get_tree().change_scene_to_file("res://UI/game_win.tscn")
+			# Server tells the winning player to show win screen
+			print("Win condition met - winner: ", winning_player.player_name)
+			_show_win_screen.rpc_id(winning_player.peer_id)
 		# All players dead = no winner (shouldn't happen with spectator mode)
 		elif alive_players == 0:
 			print("All players dead - game over")
@@ -361,3 +364,10 @@ func check_win_condition() -> void:
 			# Player wins!
 			GameStats.stop_game()
 			get_tree().change_scene_to_file("res://UI/game_win.tscn")
+
+
+@rpc("authority", "call_remote", "reliable")
+func _show_win_screen() -> void:
+	# Called by server to show win screen on the winning client
+	GameStats.stop_game()
+	get_tree().change_scene_to_file("res://UI/game_win.tscn")
