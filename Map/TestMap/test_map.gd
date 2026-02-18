@@ -22,6 +22,9 @@ var spawned_players := {}
 var map_seed := 0
 var map_generated := false
 
+# Server's config values for consistent map generation and gameplay
+var server_config := {}
+
 func _ready() -> void:
 	# Check if player died - prevent rejoining
 	if GameStats.player_died:
@@ -36,31 +39,71 @@ func _ready() -> void:
 	# Handle multiplayer seed synchronization
 	if NetworkManager.is_multiplayer():
 		if multiplayer.is_server():
-			# Server generates the seed
+			# Server generates the seed and stores all config values
 			map_seed = randi()
+			server_config = {
+				"map_size": Config.map_size,
+				"tile_size": Config.tile_size,
+				"enemy_count": Config.enemy_count,
+				"player_hp": Config.player_hp,
+				"enemy_hp": Config.enemy_hp,
+				"item_drop_chance": Config.item_drop_chance,
+				"toxic_zone_enabled": Config.toxic_zone_enabled,
+				"toxic_zone_first_wave": Config.toxic_zone_first_wave,
+				"toxic_zone_wave_interval": Config.toxic_zone_wave_interval,
+				"toxic_zone_spread_chance": Config.toxic_zone_spread_chance,
+				"toxic_zone_damage": Config.toxic_zone_damage,
+			}
 			print("Server generated map seed: ", map_seed)
-			# Sync to all clients
-			_sync_map_seed.rpc(map_seed)
+			print("Server config: ", server_config)
 			# Generate map immediately on server
 			seed(map_seed)
 			generate_map()
 		else:
-			# Client waits for seed from server
-			print("Client waiting for map seed from server...")
-			# Map will be generated when _sync_map_seed is called
+			# Client requests seed and config from server once ready
+			print("Client requesting map seed and config from server...")
+			_request_map_seed.rpc_id(1)
 	else:
 		# Single player - use random seed
 		randomize()
 		generate_map()
 
 
-@rpc("authority", "call_local", "reliable")
-func _sync_map_seed(synced_seed: int) -> void:
-	if multiplayer.is_server():
-		return  # Server already generated
+# Client requests the map seed and config from server
+@rpc("any_peer", "call_remote", "reliable")
+func _request_map_seed() -> void:
+	if not multiplayer.is_server():
+		return
 	
+	var peer_id = multiplayer.get_remote_sender_id()
+	print("Server sending map seed and config to client ", peer_id)
+	# Send seed and all config values to the requesting client
+	_receive_map_seed.rpc_id(peer_id, map_seed, server_config)
+
+
+# Server sends the map seed and all config values to a specific client
+@rpc("authority", "call_remote", "reliable")
+func _receive_map_seed(synced_seed: int, synced_config: Dictionary) -> void:
 	print("Client received map seed: ", synced_seed)
+	print("Client received server config: ", synced_config)
+	
+	# Store server's config
 	map_seed = synced_seed
+	server_config = synced_config
+	
+	# Override local config with server's config for consistent gameplay
+	Config.map_size = server_config["map_size"]
+	Config.tile_size = server_config["tile_size"]
+	Config.enemy_count = server_config["enemy_count"]
+	Config.player_hp = server_config["player_hp"]
+	Config.enemy_hp = server_config["enemy_hp"]
+	Config.item_drop_chance = server_config["item_drop_chance"]
+	Config.toxic_zone_enabled = server_config["toxic_zone_enabled"]
+	Config.toxic_zone_first_wave = server_config["toxic_zone_first_wave"]
+	Config.toxic_zone_wave_interval = server_config["toxic_zone_wave_interval"]
+	Config.toxic_zone_spread_chance = server_config["toxic_zone_spread_chance"]
+	Config.toxic_zone_damage = server_config["toxic_zone_damage"]
+	
 	seed(map_seed)
 	generate_map()
 
@@ -70,8 +113,6 @@ func generate_map() -> void:
 		return
 	
 	map_generated = true
-	print("Generating map with seed: ", map_seed if map_seed != 0 else "random")
-
 	print("Generating map with seed: ", map_seed if map_seed != 0 else "random")
 
 	background_texture.visible = false
