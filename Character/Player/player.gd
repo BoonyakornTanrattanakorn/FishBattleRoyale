@@ -102,8 +102,12 @@ func die():
 	is_dead = true
 	print("Player ", player_id, " died")
 	
+	# Check if game already ended
+	if not GameStats.game_active:
+		return
+	
 	# Check player count BEFORE emitting signal (signal handler may change scene)
-	var all_players = get_tree().get_nodes_in_group("player")
+	var all_players = get_tree().get_nodes_in_group("players")
 	var is_single_player = all_players.size() <= 1
 	
 	if is_single_player:

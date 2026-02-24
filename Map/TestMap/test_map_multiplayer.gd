@@ -138,6 +138,10 @@ func _process(delta: float) -> void:
 
 
 func _on_player_died(player_id: int) -> void:
+	# Check if game already ended (prevent double processing)
+	if not GameStats.game_active:
+		return
+	
 	# Remove dead player from alive list
 	players_alive = players_alive.filter(func(p): return not p.is_dead)
 	
