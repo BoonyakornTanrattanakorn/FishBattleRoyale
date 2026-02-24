@@ -26,6 +26,7 @@ animations = [{
 size = Vector2(64, 64)
 
 [node name="Player" type="Area2D" unique_id=1910785464 groups=["players"]]
+collision_layer = 32
 collision_mask = 64
 script = ExtResource("1_cvnsp")
 
@@ -50,7 +51,7 @@ frame_progress = 0.27862462
 
 [node name="RayCast2D" type="RayCast2D" parent="." unique_id=1099746239]
 target_position = Vector2(0, 64)
-collision_mask = 15
+collision_mask = 175
 collide_with_areas = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2030858794]
