@@ -79,10 +79,16 @@ func move(dir):
 		moving = false
 		
 func reduce_hp():
+	if invincible or is_dead:
+		return
+	
 	set_hp(get_hp()-1)
 	healthChanged.emit(hp)
+	
 	if get_hp() <= 0:
 		die()
+	else:
+		start_invincible()
 
 # Override invincible for blinking
 func start_invincible():
