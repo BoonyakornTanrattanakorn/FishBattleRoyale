@@ -7,6 +7,7 @@ const POWER_UP_SCENE = preload("res://PowerUp/power_up.tscn")
 @export var bomb_up_res: PowerUpRes
 @export var fire_up_res: PowerUpRes
 @export var speed_up_res: PowerUpRes
+@export var hp_res: PowerUpRes
 
 func destroy():
 	
@@ -21,10 +22,12 @@ func spawn_power_up():
 	get_parent().add_child(new_power_up)
 	
 	var indicator = randf()
-	if (indicator <= 0.35):
+	if (indicator <= 0.30):
 		new_power_up.init(bomb_up_res)
-	elif (indicator <= 0.70):
+	elif (indicator <= 0.55):
 		new_power_up.init(fire_up_res)
-	else:
+	elif (indicator <= 0.80):
 		new_power_up.init(speed_up_res)
+	else:
+		new_power_up.init(hp_res)
 		
