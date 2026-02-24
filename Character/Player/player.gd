@@ -11,6 +11,7 @@ signal player_died(player_id: int)
 @export var input_left: String = "Left"
 @export var input_right: String = "Right"
 @export var input_bomb: String = "PlaceBomb"
+@export var use_builtin_ui: bool = true
 
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 @onready var bomb_placement_system: BombPlacementSystem = $BombPlacementSystem
@@ -24,10 +25,12 @@ func _ready() -> void:
 	add_to_group("player")  # For toxic zone detection
 	set_max_hp(Config.player_hp)
 	set_hp(Config.player_hp)
-	heart_container.setMaxHearts(Config.player_hp)
-	heart_container.updateHearts(get_hp())
-	healthChanged.connect(heart_container.updateHearts)
-	power_up_system.powerups_changed.connect(powerup_display.update_display)
+	
+	if use_builtin_ui:
+		heart_container.setMaxHearts(Config.player_hp)
+		heart_container.updateHearts(get_hp())
+		healthChanged.connect(heart_container.updateHearts)
+		power_up_system.powerups_changed.connect(powerup_display.update_display)
 	
 func _input(_event):
 	if moving:
