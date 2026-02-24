@@ -17,22 +17,26 @@ func place_bomb():
 	if bomb_placed >= character.max_bombs:
 		return
 	
-	var character_position = character.position
-	var bomb_position = character_position
+	var bomb_position = character.global_position
 	
-	# Create bomb locally
-	create_bomb(bomb_position, explosion_size)
+	# Check if there's already a bomb at this position
+	var space_state = character.get_world_2d().direct_space_state
+	var query = PhysicsPointQueryParameters2D.new()
+	query.position = bomb_position
+	query.collision_mask = 8  # Bomb collision layer
+	query.collide_with_areas = true
+	var results = space_state.intersect_point(query)
 	
-	# Sync to all clients if multiplayer
-	if MultiplayerManager.is_multiplayer_active():
-		create_bomb_rpc.rpc(bomb_position, explosion_size)
-
-
-func create_bomb(pos: Vector2, size: int):
+	for result in results:
+		if result.collider is Bomb:
+			return  # Already a bomb here, don't place another
+	
 	var bomb = BOMB_SCENE.instantiate()
-	bomb.explosion_size = size
-	bomb.position = pos
-	get_tree().root.add_child(bomb)
+	bomb.explosion_size = explosion_size
+	bomb.global_position = bomb_position
+	
+	# Add bomb to the same parent as the character (game world)
+	character.get_parent().add_child(bomb)
 	bomb_placed += 1
 	
 	bomb.tree_exiting.connect(on_bomb_exploded)

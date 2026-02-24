@@ -5,6 +5,7 @@ var powerups_collected := 0
 var kills := 0
 var time_survived := 0.0
 var game_active := false
+var winner_id := 0  # For multiplayer - which player won
 
 var timer: Timer
 

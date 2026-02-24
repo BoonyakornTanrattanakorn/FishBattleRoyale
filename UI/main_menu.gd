@@ -99,7 +99,7 @@ func _on_play_pressed() -> void:
 
 
 func _on_multiplayer_pressed() -> void:
-	get_tree().change_scene_to_file("res://UI/multiplayer_menu.tscn")
+	get_tree().change_scene_to_file("res://Map/TestMap/test_map_multiplayer.tscn")
 
 
 func _on_settings_pressed() -> void:

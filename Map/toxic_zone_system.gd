@@ -213,11 +213,20 @@ func is_position_toxic(world_pos: Vector2) -> bool:
 
 
 func check_player_damage() -> void:
+	# Check if game is still active
+	if not GameStats.game_active:
+		return
+	
 	# Check both players and enemies
-	var players := get_tree().get_nodes_in_group("player")
+	var players := get_tree().get_nodes_in_group("players")
 	var enemies := get_tree().get_nodes_in_group("enemies")
 	
 	for player in players:
+		# Skip dead players and check game state each iteration
+		if not GameStats.game_active:
+			return
+		if player.is_dead:
+			continue
 		if player.has_method("reduce_hp") and is_position_toxic(player.position):
 			player.reduce_hp()
 			player_in_toxic_zone.emit()

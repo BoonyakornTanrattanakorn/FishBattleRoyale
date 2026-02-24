@@ -2,6 +2,16 @@ extends Character
 class_name Player
 
 signal healthChanged
+signal player_died(player_id: int)
+
+# Player identification and input configuration
+@export var player_id: int = 1
+@export var input_up: String = "Up"
+@export var input_down: String = "Down"
+@export var input_left: String = "Left"
+@export var input_right: String = "Right"
+@export var input_bomb: String = "PlaceBomb"
+@export var use_builtin_ui: bool = true
 
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 @onready var bomb_placement_system: BombPlacementSystem = $BombPlacementSystem
@@ -21,24 +31,11 @@ func _ready() -> void:
 	set_max_hp(Config.player_hp)
 	set_hp(Config.player_hp)
 	
-	# Set multiplayer authority
-	set_multiplayer_authority(peer_id)
-	
-	# Setup UI - only show for local player
-	var is_local_player = is_multiplayer_authority()
-	camera.enabled = is_local_player
-	heart_container.visible = is_local_player
-	powerup_display.visible = is_local_player
-	
-	if is_local_player:
+	if use_builtin_ui:
 		heart_container.setMaxHearts(Config.player_hp)
 		heart_container.updateHearts(get_hp())
 		healthChanged.connect(heart_container.updateHearts)
 		power_up_system.powerups_changed.connect(powerup_display.update_display)
-	
-	# Show player name
-	name_label.text = player_name
-	name_label.visible = true
 	
 func _input(_event):
 	# Only process input for the local player
@@ -48,20 +45,18 @@ func _input(_event):
 	if moving:
 		return
 
-	if Input.is_action_pressed("Right"):
+	if Input.is_action_pressed(input_right):
 		move(Vector2.RIGHT)
 		animated_sprite_2d.flip_h = false
-		sync_sprite_flip.rpc(false)
-	elif Input.is_action_pressed("Left"):
+	elif Input.is_action_pressed(input_left):
 		move(Vector2.LEFT)
 		animated_sprite_2d.flip_h = true
-		sync_sprite_flip.rpc(true)
-	elif Input.is_action_pressed("Up"):
+	elif Input.is_action_pressed(input_up):
 		move(Vector2.UP)
-	elif Input.is_action_pressed("Down"):
+	elif Input.is_action_pressed(input_down):
 		move(Vector2.DOWN)
 
-	if Input.is_action_just_pressed("PlaceBomb"):
+	if Input.is_action_just_pressed(input_bomb):
 		bomb_placement_system.place_bomb()
 
 func move(dir):
@@ -105,9 +100,28 @@ func die():
 	if is_dead:
 		return
 	is_dead = true
-	print("player died")
-	GameStats.stop_game()
-	get_tree().change_scene_to_file("res://UI/game_over.tscn")
+	print("Player ", player_id, " died")
+	
+	# Check if game already ended
+	if not GameStats.game_active:
+		return
+	
+	# Check player count BEFORE emitting signal (signal handler may change scene)
+	var all_players = get_tree().get_nodes_in_group("players")
+	var is_single_player = all_players.size() <= 1
+	
+	if is_single_player:
+		# Single player mode - end the game immediately
+		GameStats.stop_game()
+		get_tree().change_scene_to_file("res://UI/game_over.tscn")
+	else:
+		# Multiplayer mode - emit signal and hide the player
+		# Note: signal handler may change scene, so do cleanup first
+		visible = false
+		set_process(false)
+		set_physics_process(false)
+		set_process_input(false)
+		player_died.emit(player_id)
 
 
 func _on_area_entered(area: Area2D):
