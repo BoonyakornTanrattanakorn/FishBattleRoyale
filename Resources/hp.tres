@@ -3,7 +3,11 @@
 [ext_resource type="Script" uid="uid://tvx36yg1ykkd" path="res://PowerUp/power_up_res.gd" id="1_luqv1"]
 [ext_resource type="Texture2D" uid="uid://bbeca2s0xbqh2" path="res://Assets/hp.png" id="2_luqv1"]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_hp"]
+atlas = ExtResource("2_luqv1")
+region = Rect2(0, 0, 17, 17)
+
 [resource]
 script = ExtResource("1_luqv1")
 type = 3
-texture = ExtResource("2_luqv1")
+texture = SubResource("AtlasTexture_hp")
