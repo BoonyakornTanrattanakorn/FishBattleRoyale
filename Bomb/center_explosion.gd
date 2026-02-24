@@ -22,8 +22,13 @@ const DIRECTIONAL_EXPLOSION = preload("res://Bomb/directional_explosion.tscn")
 # Explosion size for all directions
 var size = 1
 
+# Track damaged characters to prevent double damage
+var damaged_characters = []
+
 func _ready() -> void:
 	check_reycasts()
+	# Check for characters at center position immediately
+	check_center_damage()
 
 func check_reycasts():
 	for i in raycasts.size():
@@ -71,6 +76,25 @@ func calculate_size_of_explosion(raycast: RayCast2D):
 func execute_explosion_collision(collider: Object):
 	if collider as DestructibleBlock:
 		(collider as DestructibleBlock).destroy()
+
+func check_center_damage():
+	# Check for any characters already overlapping the center explosion
+	var overlapping_areas = get_overlapping_areas()
+	for area in overlapping_areas:
+		if area is Character and area not in damaged_characters:
+			var distance := global_position.distance_to(area.global_position)
+			if distance < Config.tile_size * 0.7:
+				damaged_characters.append(area)
+				(area as Character).reduce_hp()
+				print("Center bomb hit, HP = ", area.get_hp())
+
+func _on_area_entered(area: Node2D) -> void:
+	if area is Character and area not in damaged_characters:
+		var distance := global_position.distance_to(area.global_position)
+		if distance < Config.tile_size * 0.7:
+			damaged_characters.append(area)
+			(area as Character).reduce_hp()
+			print("Center bomb hit, HP = ", area.get_hp())
 
 func _on_animated_sprite_2d_animation_finished() -> void:
 	queue_free()
