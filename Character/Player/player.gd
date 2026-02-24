@@ -2,6 +2,15 @@ extends Character
 class_name Player
 
 signal healthChanged
+signal player_died(player_id: int)
+
+# Player identification and input configuration
+@export var player_id: int = 1
+@export var input_up: String = "Up"
+@export var input_down: String = "Down"
+@export var input_left: String = "Left"
+@export var input_right: String = "Right"
+@export var input_bomb: String = "PlaceBomb"
 
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 @onready var bomb_placement_system: BombPlacementSystem = $BombPlacementSystem
@@ -24,18 +33,18 @@ func _input(_event):
 	if moving:
 		return
 
-	if Input.is_action_pressed("Right"):
+	if Input.is_action_pressed(input_right):
 		move(Vector2.RIGHT)
 		animated_sprite_2d.flip_h = false
-	elif Input.is_action_pressed("Left"):
+	elif Input.is_action_pressed(input_left):
 		move(Vector2.LEFT)
 		animated_sprite_2d.flip_h = true
-	elif Input.is_action_pressed("Up"):
+	elif Input.is_action_pressed(input_up):
 		move(Vector2.UP)
-	elif Input.is_action_pressed("Down"):
+	elif Input.is_action_pressed(input_down):
 		move(Vector2.DOWN)
 
-	if Input.is_action_just_pressed("PlaceBomb"):
+	if Input.is_action_just_pressed(input_bomb):
 		bomb_placement_system.place_bomb()
 
 func move(dir):
@@ -79,9 +88,13 @@ func die():
 	if is_dead:
 		return
 	is_dead = true
-	print("player died")
-	GameStats.stop_game()
-	get_tree().change_scene_to_file("res://UI/game_over.tscn")
+	print("Player ", player_id, " died")
+	player_died.emit(player_id)
+	# Hide the player instead of destroying
+	visible = false
+	set_process(false)
+	set_physics_process(false)
+	set_process_input(false)
 
 
 func _on_area_entered(area: Area2D):

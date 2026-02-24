@@ -18,12 +18,13 @@ func place_bomb():
 		return
 		
 	var bomb = BOMB_SCENE.instantiate()
-	var character_position = character.position
-	var bomb_position = character_position
+	var bomb_position = character.global_position
 	
 	bomb.explosion_size = explosion_size
-	bomb.position = bomb_position
-	get_tree().root.add_child(bomb)
+	bomb.global_position = bomb_position
+	
+	# Add bomb to the same parent as the character (game world)
+	character.get_parent().add_child(bomb)
 	bomb_placed += 1
 	
 	bomb.tree_exiting.connect(on_bomb_exploded)

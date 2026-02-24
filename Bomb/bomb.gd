@@ -8,7 +8,7 @@ var explosion_size = 1
 
 func _on_timer_timeout() -> void:
 	var explosion = CENTRAL_EXPLOSION.instantiate()
-	explosion.position = position
+	explosion.global_position = global_position
 	explosion.size = explosion_size
-	get_tree().root.add_child(explosion)
+	get_parent().add_child(explosion)
 	queue_free()
