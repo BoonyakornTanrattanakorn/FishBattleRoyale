@@ -89,12 +89,23 @@ func die():
 		return
 	is_dead = true
 	print("Player ", player_id, " died")
-	player_died.emit(player_id)
-	# Hide the player instead of destroying
-	visible = false
-	set_process(false)
-	set_physics_process(false)
-	set_process_input(false)
+	
+	# Check player count BEFORE emitting signal (signal handler may change scene)
+	var all_players = get_tree().get_nodes_in_group("player")
+	var is_single_player = all_players.size() <= 1
+	
+	if is_single_player:
+		# Single player mode - end the game immediately
+		GameStats.stop_game()
+		get_tree().change_scene_to_file("res://UI/game_over.tscn")
+	else:
+		# Multiplayer mode - emit signal and hide the player
+		# Note: signal handler may change scene, so do cleanup first
+		visible = false
+		set_process(false)
+		set_physics_process(false)
+		set_process_input(false)
+		player_died.emit(player_id)
 
 
 func _on_area_entered(area: Area2D):

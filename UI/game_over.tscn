@@ -131,11 +131,3 @@ custom_minimum_size = Vector2(150, 50)
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Main Menu"
-
-[node name="RetryButton" type="Button" parent="Panel/VBoxContainer/ButtonContainer"]
-custom_minimum_size = Vector2(150, 50)
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_hover_color = Color(0.2, 0.8, 1, 1)
-theme_override_font_sizes/font_size = 20
-text = "Retry"
