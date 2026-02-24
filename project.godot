@@ -28,9 +28,7 @@ MultiplayerManager="*res://Global/multiplayer_manager.gd"
 
 [display]
 
-window/size/viewport_width=1152
 window/size/viewport_height=720
-
 window/stretch/mode="canvas_items"
 
 [global_group]

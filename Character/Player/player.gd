@@ -31,6 +31,9 @@ func _ready() -> void:
 	set_max_hp(Config.player_hp)
 	set_hp(Config.player_hp)
 	
+	# Update name label
+	name_label.text = player_name
+	
 	if use_builtin_ui:
 		heart_container.setMaxHearts(Config.player_hp)
 		heart_container.updateHearts(get_hp())

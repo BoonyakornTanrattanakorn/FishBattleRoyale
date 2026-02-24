@@ -88,7 +88,7 @@ func check_center_damage():
 				(area as Character).reduce_hp()
 				print("Center bomb hit, HP = ", area.get_hp())
 
-func _on_area_entered(area: Node2D) -> void:
+func _on_area_entered(area: Area2D) -> void:
 	if area is Character and area not in damaged_characters:
 		var distance := global_position.distance_to(area.global_position)
 		if distance < Config.tile_size * 0.7:

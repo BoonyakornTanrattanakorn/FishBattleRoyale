@@ -35,6 +35,12 @@ var players_alive: Array[Player] = []
 func _ready() -> void:
 	randomize()
 	
+	# Set player name to be unique
+	player1.player_name = "Player 1"
+	player1.name_label.text = "Player 1"
+	player2.player_name = "Player 2"
+	player2.name_label.text = "Player 2"
+	
 	# Share world_2d between viewports so they see the same game world
 	viewport2.world_2d = viewport1.world_2d
 	
