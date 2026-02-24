@@ -147,7 +147,7 @@ func spawn_enemies() -> void:
 			var space_state := get_world_2d().direct_space_state
 			var query := PhysicsPointQueryParameters2D.new()
 			query.position = spawn_pos + Vector2(Config.tile_size / 2, Config.tile_size / 2)
-			query.collision_mask = 1  # Check for blocks (collision layer 1)
+			query.collision_mask = 6  # Check for walls (layer 2) and corals (layer 4)
 			query.collide_with_areas = false
 			query.collide_with_bodies = true
 			
