@@ -19,10 +19,15 @@ signal player_died(player_id: int)
 
 @onready var heart_container: HBoxContainer = $CanvasLayer/heartContainer
 @onready var powerup_display: HBoxContainer = $CanvasLayer/PowerupDisplay
+@onready var camera: Camera2D = $Camera2D
+@onready var name_label: Label = $NameLabel
+
+var peer_id: int = 1  # Multiplayer peer ID
+var player_name: String = "Player"
 
 func _ready() -> void:
 	super()
-	add_to_group("player")  # For toxic zone detection
+	add_to_group("players")  # For toxic zone detection
 	set_max_hp(Config.player_hp)
 	set_hp(Config.player_hp)
 	
@@ -33,6 +38,10 @@ func _ready() -> void:
 		power_up_system.powerups_changed.connect(powerup_display.update_display)
 	
 func _input(_event):
+	# Only process input for the local player
+	if not is_multiplayer_authority():
+		return
+	
 	if moving:
 		return
 
@@ -116,3 +125,9 @@ func _on_area_entered(area: Area2D):
 		GameStats.add_powerup()
 		power_up_system.enable_power_up(area.type)
 		area.queue_free()
+
+
+# ============= MULTIPLAYER SYNC =============
+@rpc("any_peer", "call_local")
+func sync_sprite_flip(flip: bool):
+	animated_sprite_2d.flip_h = flip

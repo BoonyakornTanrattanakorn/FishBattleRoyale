@@ -30,5 +30,15 @@ func place_bomb():
 	bomb.tree_exiting.connect(on_bomb_exploded)
 
 
+@rpc("any_peer", "call_local")
+func create_bomb_rpc(pos: Vector2, size: int):
+	# Only execute on remote clients (not the sender)
+	if multiplayer.get_remote_sender_id() != multiplayer.get_unique_id():
+		var bomb = BOMB_SCENE.instantiate()
+		bomb.explosion_size = size
+		bomb.position = pos
+		get_tree().root.add_child(bomb)
+
+
 func on_bomb_exploded():
 	bomb_placed -= 1
